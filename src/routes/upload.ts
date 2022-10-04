@@ -45,8 +45,8 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
     const { file } = data
 
     try {
-      await wm.writePristine()
       await wm.pump(file)
+      await wm.writePristine()
 
       if (file.truncated) {
         wm.clean()
