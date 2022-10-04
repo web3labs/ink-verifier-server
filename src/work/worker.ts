@@ -7,7 +7,7 @@ import HttpError from '../errors'
 import Docker from './docker'
 import { downloadByteCode } from './substrate'
 
-const BASE_DIR = '/home/marc/Development/epirus/ink-verification-service/tmp'
+const BASE_DIR = process.env.WORK_BASE_DIR || path.resolve(__dirname, '../../tmp')
 
 const HEAD_BYTES = 4
 
