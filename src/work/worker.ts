@@ -2,6 +2,7 @@ import { FastifyBaseLogger } from 'fastify'
 import * as fs from 'fs'
 import * as path from 'path'
 import { Readable } from 'stream'
+
 import HttpError from '../errors'
 import Docker from './docker'
 import { downloadByteCode } from './substrate'
@@ -21,47 +22,17 @@ interface TypeInfo {
   mime: string
 }
 
-async function * concat (...readables : Readable[]) {
-  for (const readable of readables) {
-    for await (const chunk of readable) { yield chunk }
-  }
-}
-
-function checkBytes (buffer: Buffer, headers: number[]) {
-  for (const [index, header] of headers.entries()) {
-    if (header !== buffer[index]) {
-      return false
-    }
-  }
-
-  return true
-}
-
-async function resolveTypeInfo (buffer: Buffer) : Promise<TypeInfo> {
-  if (checkBytes(buffer, [0x50, 0x4B, 0x3, 0x4])) {
-    return {
-      ext: 'zip',
-      mime: 'application/zip'
-    }
-  }
-
-  if (checkBytes(buffer, [0x1F, 0x8B, 0x8])) {
-    return {
-      ext: 'gz',
-      mime: 'application/gzip'
-    }
-  }
-
-  if (checkBytes(buffer, [0x42, 0x5A, 0x68])) {
-    return {
-      ext: 'bz2',
-      mime: 'application/x-bzip2'
-    }
-  }
-
-  throw new HttpError(`Unknown mime type for bytes: ${buffer}`, 400)
-}
-
+/**
+ * This class manages the work load for contract verifications.
+ *
+ * Including:
+ * - Working directory for the work loads
+ * - Checking the compressed archive type
+ * - Writing the uploaded package to disk
+ * - Downloading the pristine WASM from a Substrate chain
+ * - Checking Docker work load processes
+ * - Triggering Docker work load processing
+ */
 class WorkMan {
   network: string
   codeHash: string
@@ -120,6 +91,47 @@ class WorkMan {
     }
     return path.resolve(this.workDir, `package.${typeInfo.ext}`)
   }
+}
+
+async function * concat (...readables : Readable[]) {
+  for (const readable of readables) {
+    for await (const chunk of readable) { yield chunk }
+  }
+}
+
+function checkBytes (buffer: Buffer, headers: number[]) {
+  for (const [index, header] of headers.entries()) {
+    if (header !== buffer[index]) {
+      return false
+    }
+  }
+
+  return true
+}
+
+async function resolveTypeInfo (buffer: Buffer) : Promise<TypeInfo> {
+  if (checkBytes(buffer, [0x50, 0x4B, 0x3, 0x4])) {
+    return {
+      ext: 'zip',
+      mime: 'application/zip'
+    }
+  }
+
+  if (checkBytes(buffer, [0x1F, 0x8B, 0x8])) {
+    return {
+      ext: 'gz',
+      mime: 'application/gzip'
+    }
+  }
+
+  if (checkBytes(buffer, [0x42, 0x5A, 0x68])) {
+    return {
+      ext: 'bz2',
+      mime: 'application/x-bzip2'
+    }
+  }
+
+  throw new HttpError(`Unknown mime type for bytes: ${buffer}`, 400)
 }
 
 export default WorkMan

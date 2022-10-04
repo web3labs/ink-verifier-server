@@ -35,9 +35,16 @@ async function pristineCode ({
   }
 }
 
+/**
+ * Writes the pristine WASM to the specified sink
+ * for a given code hash, while resolves the network
+ * endpoint by info name.
+ */
 export function downloadByteCode ({
   network, codeHash, sink
-}: { network: string, codeHash: string, sink: Writable}) {
+}: {
+  network: string, codeHash: string, sink: Writable
+}) {
   const endpoints = createWsEndpoints().filter(({
     isDisabled, isUnreachable, value, info
   }) =>
