@@ -131,7 +131,7 @@ async function resolveTypeInfo (buffer: Buffer) : Promise<TypeInfo> {
     }
   }
 
-  throw new HttpError(`Unknown mime type for bytes: ${buffer}`, 400)
+  throw new HttpError(`Unknown mime type for bytes: ${buffer.toString('hex')}`, 400)
 }
 
 export default WorkMan
