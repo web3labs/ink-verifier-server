@@ -23,8 +23,7 @@ async function pristineCode ({
       if (codec.isEmpty) {
         throw new Error(`Pristine code not found for ${codeHash}`)
       }
-      // TODO check the 5 byte prefix?
-      sink.write(codec.toU8a().slice(5))
+      sink.write(codec.toU8a(true))
     } else {
       throw new Error(`Contracts pallet not available in ${wsEndpoint}`)
     }
