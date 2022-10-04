@@ -46,16 +46,17 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
 
     try {
       await wm.pump(file)
-      await wm.writePristine()
 
       if (file.truncated) {
         wm.clean()
         reply.send(new fastify.multipartErrors.FilesLimitError())
+      } else {
+        await wm.writePristine()
+        reply.send(200)
       }
-
-      reply.send(200)
     } catch (error) {
       file.resume()
+      wm.clean()
 
       throw HttpError.from(error, 400)
     }
