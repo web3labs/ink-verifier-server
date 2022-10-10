@@ -1,6 +1,8 @@
+import fs from 'fs'
+
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { createWsEndpoints } from '@polkadot/apps-config/endpoints'
-import { Writable } from 'stream'
+
 import HttpError from '../errors'
 
 function hasContractsPallet (api: ApiPromise) : boolean {
@@ -9,28 +11,40 @@ function hasContractsPallet (api: ApiPromise) : boolean {
     undefined
 }
 
-async function pristineCode ({
-  wsEndpoint, codeHash, sink
+function writeResponse (dst: string, data: Uint8Array) {
+  const sink = fs.createWriteStream(dst)
+  return new Promise((resolve, reject) => {
+    sink.on('error', reject)
+    sink.on('open', () => {
+      sink.write(data)
+      sink.end()
+    })
+    sink.on('close', resolve)
+  })
+}
+
+async function fetchPristineCode ({
+  wsEndpoint, codeHash
 }: {
-  wsEndpoint: string, codeHash: string, sink: Writable
-}) {
+  wsEndpoint: string, codeHash: string
+}) : Promise<Uint8Array> {
   const provider = new WsProvider(wsEndpoint)
   const api = await ApiPromise.create({ provider })
 
   try {
     if (hasContractsPallet(api)) {
-      const codec = await api.query.contracts.pristineCode(codeHash)
-      if (codec.isEmpty) {
+      const res = await api.query.contracts.pristineCode(codeHash)
+      if (res.isEmpty) {
         throw new Error(`Pristine code not found for ${codeHash}`)
       }
-      sink.write(codec.toU8a(true))
+      return res.toU8a(true)
     } else {
       throw new Error(`Contracts pallet not available in ${wsEndpoint}`)
     }
   } catch (error) {
     throw HttpError.from(error, 400)
   } finally {
-    api.disconnect()
+    await api.disconnect()
   }
 }
 
@@ -39,10 +53,10 @@ async function pristineCode ({
  * for a given code hash, while resolves the network
  * endpoint by info name.
  */
-export function downloadByteCode ({
-  network, codeHash, sink
+export async function downloadByteCode ({
+  network, codeHash, dst
 }: {
-  network: string, codeHash: string, sink: Writable
+  network: string, codeHash: string, dst: string
 }) {
   const endpoints = createWsEndpoints().filter(({
     isDisabled, isUnreachable, value, info
@@ -57,12 +71,11 @@ export function downloadByteCode ({
 
   if (endpoints.length > 0) {
     const endpoint = endpoints[0]
-
-    pristineCode({
+    const data = await fetchPristineCode({
       wsEndpoint: endpoint.value,
-      codeHash,
-      sink
+      codeHash
     })
+    await writeResponse(dst, data)
   } else {
     throw new HttpError(`No endpoint found for ${network}`, 400)
   }

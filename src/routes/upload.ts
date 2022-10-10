@@ -40,23 +40,29 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
       log: fastify.log
     })
 
-    await wm.check()
+    await wm.checkForStaging()
 
     const { file } = data
 
     try {
-      await wm.pump(file)
+      wm.prepareStaging()
+
+      await wm.writeToStaging(file)
 
       if (file.truncated) {
-        wm.clean()
+        wm.cleanStaging()
         reply.send(new fastify.multipartErrors.FilesLimitError())
       } else {
         await wm.writePristine()
+
+        // Roger, everything right to start processing
+        await wm.startProcessing()
+
         reply.send(200)
       }
     } catch (error) {
       file.resume()
-      wm.clean()
+      wm.cleanStaging()
 
       throw HttpError.from(error, 400)
     }

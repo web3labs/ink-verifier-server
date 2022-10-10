@@ -7,7 +7,7 @@ import HttpError from '../errors'
 import Docker from './docker'
 import { downloadByteCode } from './substrate'
 
-const BASE_DIR = process.env.WORK_BASE_DIR || path.resolve(__dirname, '../../tmp')
+const BASE_DIR = process.env.BASE_DIR || path.resolve(__dirname, '../../tmp')
 
 const HEAD_BYTES = 4
 
@@ -36,7 +36,8 @@ interface TypeInfo {
 class WorkMan {
   network: string
   codeHash: string
-  workDir: string
+  stagingDir: string
+  processingDir: string
   docker: Docker
   log: FastifyBaseLogger
 
@@ -44,52 +45,76 @@ class WorkMan {
     this.network = String(params.network)
     this.codeHash = String(params.codeHash)
     this.log = params.log
-    this.workDir = path.resolve(BASE_DIR, this.network, this.codeHash)
+    this.stagingDir = path.resolve(BASE_DIR, 'staging', this.network, this.codeHash)
+    this.processingDir = path.resolve(BASE_DIR, 'processing', this.network, this.codeHash)
     this.docker = new Docker()
   }
 
-  async check () {
-    const psList = await this.docker.ps()
-    console.log(psList)
+  async checkForStaging () {
+    // Work load not verified
+    // TBD
 
-    if (fs.existsSync(this.workDir)) {
-      throw new HttpError(`Workload for ${this.network}/${this.codeHash} is queued for processing.`, 400)
+    // Work load not in staging
+    if (fs.existsSync(this.stagingDir)) {
+      throw new HttpError(`Workload for ${this.network}/${this.codeHash} is staged for processing.`, 400)
+    }
+
+    // Work load not in processing
+    if (fs.existsSync(this.processingDir)) {
+      throw new HttpError(`Workload for ${this.network}/${this.codeHash} is in processing.`, 400)
+    }
+
+    // We can run a new container
+    if (!this.docker.canRunMore()) {
+      throw new HttpError('Workload limit reached, please retry later', 429)
     }
   }
 
   async writePristine () {
-    const sink = fs.createWriteStream(path.resolve(this.workDir, 'pristine.wasm'))
     await downloadByteCode({
       network: this.network,
       codeHash: this.codeHash,
-      sink
+      dst: path.resolve(this.stagingDir, 'pristine.wasm')
     })
   }
 
-  async pump (file: Readable) {
+  async writeToStaging (file: Readable) {
     const head : Buffer = file.read(HEAD_BYTES)
-    const fileStream = Readable.from(
+    const srcStream = Readable.from(
       await concat(Readable.from(head), file)
     )
     // Determine the mime type from file content
     // https://github.com/mscdex/busboy/issues/236
     const typeInfo = await resolveTypeInfo(head)
-    const dst = this.prepareWorkDir(typeInfo)
+    const dst = path.resolve(this.stagingDir, `package.${typeInfo.ext}`)
+    const dstStream = fs.createWriteStream(dst)
 
-    fileStream.pipe(fs.createWriteStream(dst))
+    // Note that pipe ends by default
+    srcStream.pipe(dstStream)
   }
 
-  clean () {
-    this.log.info(`Cleaning up directory ${this.workDir}`)
-    fs.rmdirSync(this.workDir)
+  async startProcessing () {
+    this.prepareDirectory(this.processingDir)
+    this.log.info(`Moving from ${this.stagingDir} to ${this.processingDir}`)
+    // Assuming we are using the same device
+    fs.renameSync(this.stagingDir, this.processingDir)
   }
 
-  private prepareWorkDir (typeInfo: TypeInfo) {
-    if (!fs.existsSync(this.workDir)) {
-      fs.mkdirSync(this.workDir, { recursive: true })
-      this.log.info(`Created work directory ${this.workDir}`)
+  cleanStaging () {
+    this.log.info(`Cleaning up staging directory ${this.stagingDir}`)
+    fs.rmdirSync(this.stagingDir)
+  }
+
+  prepareStaging () {
+    this.prepareDirectory(this.stagingDir)
+  }
+
+  private prepareDirectory (dir: string) {
+    if (fs.existsSync(dir)) {
+      throw new HttpError(`Workload ${dir} already exists`, 400)
     }
-    return path.resolve(this.workDir, `package.${typeInfo.ext}`)
+    fs.mkdirSync(dir, { recursive: true })
+    this.log.info(`Created directory ${dir}`)
   }
 }
 
