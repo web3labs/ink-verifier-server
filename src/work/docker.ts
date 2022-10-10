@@ -32,6 +32,7 @@ class Docker {
       'run',
       '--rm',
       '--cidfile', path.resolve(processingDir, 'cid'),
+      '--security-opt=no-new-privileges',
       '-v', `${processingDir}:/build`,
       '-v', `${path.resolve(CACHES_DIR, '.cache')}:/root/.cache`,
       '-v', `${path.resolve(CACHES_DIR, '.cargo', 'registry')}:/usr/local/cargo/registry`,
