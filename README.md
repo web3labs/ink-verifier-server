@@ -8,7 +8,7 @@ Environment variables:
 
 |Name|Description|
 |----|-----------|
-|STAGING_DIR|Base staging directory for verification work loads|
+|BASE_DIR|Base directory for verification pipeline stages|
 |MAX_CONTAINERS|Maximum number of running containers|
 
 

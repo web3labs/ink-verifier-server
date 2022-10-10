@@ -47,7 +47,9 @@ class WorkMan {
     this.log = params.log
     this.stagingDir = path.resolve(BASE_DIR, 'staging', this.network, this.codeHash)
     this.processingDir = path.resolve(BASE_DIR, 'processing', this.network, this.codeHash)
-    this.docker = new Docker()
+    this.docker = new Docker({
+      log: params.log
+    })
   }
 
   async checkForStaging () {
@@ -98,6 +100,11 @@ class WorkMan {
     this.log.info(`Moving from ${this.stagingDir} to ${this.processingDir}`)
     // Assuming we are using the same device
     fs.renameSync(this.stagingDir, this.processingDir)
+
+    // Here max containers could be check again, but it implies to clean up
+    // resources in case of max reached.
+
+    this.docker.run(this.processingDir)
   }
 
   cleanStaging () {
@@ -113,7 +120,18 @@ class WorkMan {
     if (fs.existsSync(dir)) {
       throw new HttpError(`Workload ${dir} already exists`, 400)
     }
-    fs.mkdirSync(dir, { recursive: true })
+
+    fs.mkdirSync(dir, {
+      recursive: true
+    })
+
+    // TODO optionally if user-remap set
+    // if USER_REMAP==true
+    // TODO: SECURITY check
+    // fs.chmodSync(dir, 0o777) << viking
+    // myuser belongs to remapGroup as well
+    // fs.chownSync(dir, myuser, remapGroup) << least privilege
+
     this.log.info(`Created directory ${dir}`)
   }
 }

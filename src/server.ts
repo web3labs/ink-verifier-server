@@ -3,7 +3,6 @@ import UnderPressure from '@fastify/under-pressure'
 import Multipart from '@fastify/multipart'
 
 import { Upload } from './routes'
-import Docker from './work/docker'
 
 const server: FastifyInstance = Fastify({
   logger: true
@@ -30,12 +29,6 @@ server.register(Upload)
 // Restart logic (log any of the rm's if any)
 // 1) clean up staging/
 // 2) clean up processing/
-
-server.get('/test', async (req, reply) => {
-  const dock = new Docker()
-  dock.run()
-  reply.send('OK')
-})
 
 const start = async () => {
   try {
