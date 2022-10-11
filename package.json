@@ -15,6 +15,7 @@
   "dependencies": {
     "@fastify/cors": "^8.1.0",
     "@fastify/multipart": "^7.2.0",
+    "@fastify/swagger": "^8.0.0",
     "@fastify/under-pressure": "^8.1.0",
     "@polkadot/api": "^9.4.3",
     "@polkadot/apps-config": "^0.121.1",
