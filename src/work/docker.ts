@@ -12,6 +12,12 @@ function splitLines (input: string): string[] {
   return input.replace(/\r/g, '').split('\n')
 }
 
+interface RunOptions {
+  processingDir: string,
+  successHandler: () => void,
+  errorHandler: () => void
+}
+
 class Docker {
   log: FastifyBaseLogger
 
@@ -22,12 +28,12 @@ class Docker {
   /**
    * TBD
    */
-  run (processingDir: string) {
+  run ({ processingDir, successHandler, errorHandler }: RunOptions) {
     // TODO empty errors
-
     const params = [
       'run',
       '--rm',
+      // '--user', '1000:1000', // using this to bypass permission issues T_T
       '--cidfile', path.resolve(processingDir, 'cid'),
       '--security-opt=no-new-privileges',
       '-v', `${processingDir}:/build`,
@@ -52,6 +58,11 @@ class Docker {
       // double check pristine before moving, downloading it again, just in case
       // compromised and ring alarms if not ??
       this.log.info(`child process exited with code ${code}`)
+      if (code === 0) {
+        successHandler()
+      } else {
+        errorHandler()
+      }
     })
   }
 

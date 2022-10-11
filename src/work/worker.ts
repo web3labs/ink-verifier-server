@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { Readable } from 'stream'
 
-import { BASE_DIR } from '../config'
+import { BASE_DIR, PUBLISH_DIR } from '../config'
 import HttpError from '../errors'
 import Docker from './docker'
 import { downloadByteCode } from './substrate'
@@ -37,6 +37,8 @@ class WorkMan {
   codeHash: string
   stagingDir: string
   processingDir: string
+  errorDir: string
+  publishDir: string
   docker: Docker
   log: FastifyBaseLogger
 
@@ -46,6 +48,8 @@ class WorkMan {
     this.log = params.log
     this.stagingDir = path.resolve(BASE_DIR, 'staging', this.network, this.codeHash)
     this.processingDir = path.resolve(BASE_DIR, 'processing', this.network, this.codeHash)
+    this.errorDir = path.resolve(BASE_DIR, 'error', this.network, this.codeHash)
+    this.publishDir = path.resolve(PUBLISH_DIR, this.network, this.codeHash)
     this.docker = new Docker({
       log: params.log
     })
@@ -103,16 +107,44 @@ class WorkMan {
     // Here max containers could be check again, but it implies to clean up
     // resources in case of max reached.
 
-    this.docker.run(this.processingDir)
+    this.docker.run({
+      processingDir: this.processingDir,
+      successHandler: this.successHandler.bind(this),
+      errorHandler: this.errorHandler.bind(this)
+    })
+  }
+
+  // how to test?
+  successHandler () {
+    this.prepareDirectory(this.publishDir)
+    // Probably we just want to move the package/ instead of the whole processingDir/
+    fs.renameSync(this.processingDir, this.publishDir)
+  }
+
+  async errorHandler () {
+    // If error directory already exists, assume it's an outdated error and clean up
+    if (fs.existsSync(this.errorDir)) {
+      this.cleanDirectory(this.errorDir)
+    }
+
+    fs.mkdirSync(this.errorDir, {
+      recursive: true
+    })
+
+    fs.renameSync(this.processingDir, this.errorDir)
   }
 
   cleanStaging () {
-    this.log.info(`Cleaning up staging directory ${this.stagingDir}`)
-    fs.rmdirSync(this.stagingDir)
+    this.cleanDirectory(this.stagingDir)
   }
 
   prepareStaging () {
     this.prepareDirectory(this.stagingDir)
+  }
+
+  private cleanDirectory (dir: string) {
+    this.log.info(`Cleaning up directory ${dir}`)
+    fs.rmSync(dir, { recursive: true, force: true })
   }
 
   private prepareDirectory (dir: string) {

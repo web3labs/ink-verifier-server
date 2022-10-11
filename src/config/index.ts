@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export const BASE_DIR = process.env.BASE_DIR || path.resolve(__dirname, '../../tmp')
+export const PUBLISH_DIR = process.env.BASE_DIR || path.resolve(__dirname, '../../publish')
 export const MAX_CONTAINERS = Number(process.env.MAX_CONTAINERS || 5)
 export const VERIFIER_IMAGE = process.env.VERIFIER_IMAGE || 'ink-verifier:develop'
 export const CACHES_DIR = process.env.CACHES_DIR || path.resolve(__dirname, '../../tmp/caches')
