@@ -19,8 +19,8 @@ interface UploadBody {
  *
  * Rococo canvas example:
  * ```
- * curl --location --request POST 'http://127.0.0.1:3000/upload/rococoContracts/0x51606b677cc203a561cd0cfbba708024feb85f46fe42238afc55a115785e1f95' \
- *      --form 'file=@"./package.zip"'
+ * curl --location --request POST 'http://127.0.0.1:3000/upload/rococoContracts/0x5160...e1f95' \
+ *      --form 'package=@"./package.zip"'
  * ```
  *
  * @param fastify The fatify instance
