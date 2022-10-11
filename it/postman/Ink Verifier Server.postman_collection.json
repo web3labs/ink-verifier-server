@@ -14,7 +14,7 @@
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "file",
+							"key": "package",
 							"type": "file",
 							"src": "<YOUR_PATH>/ink-build-test/package.zip"
 						}
