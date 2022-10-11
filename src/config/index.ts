@@ -11,3 +11,4 @@ export const VERIFIER_IMAGE = process.env.VERIFIER_IMAGE || 'ink-verifier:develo
 export const CACHES_DIR = process.env.CACHES_DIR || path.resolve(__dirname, '../../tmp/caches')
 export const SERVER_HOST = process.env.SERVER_HOST || '127.0.0.1'
 export const SERVER_PORT = Number(process.env.SERVER_PORT || 3000)
+export const OAS_URL = process.env.OAS_URL || `http://${SERVER_HOST}:${SERVER_PORT}`

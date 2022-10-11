@@ -5,7 +5,7 @@ import UnderPressure from '@fastify/under-pressure'
 import Multipart from '@fastify/multipart'
 
 import { Upload } from './routes'
-import { SERVER_HOST, SERVER_PORT } from './config'
+import { OAS_URL, SERVER_HOST, SERVER_PORT } from './config'
 
 function ajvPlugin (ajv : ajv.Ajv) {
   ajv.addKeyword('isFileType', {
@@ -48,7 +48,7 @@ server.register(Swagger, {
       version: '0.0.1'
     },
     servers: [{
-      url: 'http://127.0.0.1:3000'
+      url: OAS_URL
     }]
   }
 })
@@ -61,11 +61,6 @@ server.get('/oas.json', {
 })
 
 server.register(Upload)
-
-// TODO impl
-// Restart logic (log any of the rm's if any)
-// 1) clean up staging/
-// 2) clean up processing/
 
 const start = async () => {
   try {
