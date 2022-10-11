@@ -33,7 +33,7 @@ server.register(Upload)
 
 const start = async () => {
   try {
-    await server.listen({ 
+    await server.listen({
       port: SERVER_PORT,
       host: SERVER_HOST
     })

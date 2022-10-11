@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { Readable } from 'stream'
 
-import {BASE_DIR} from '../config'
+import { BASE_DIR } from '../config'
 import HttpError from '../errors'
 import Docker from './docker'
 import { downloadByteCode } from './substrate'
