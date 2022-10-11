@@ -3,11 +3,10 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { Readable } from 'stream'
 
+import {BASE_DIR} from '../config'
 import HttpError from '../errors'
 import Docker from './docker'
 import { downloadByteCode } from './substrate'
-
-const BASE_DIR = process.env.BASE_DIR || path.resolve(__dirname, '../../tmp')
 
 const HEAD_BYTES = 4
 

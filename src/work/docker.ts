@@ -4,10 +4,7 @@ import { cliTable2Json } from 'cli-table-2-json'
 import fs from 'node:fs'
 import path from 'node:path'
 import { FastifyBaseLogger } from 'fastify'
-
-const MAX_CONTAINERS = process.env.MAX_CONTAINERS || 5
-const VERIFIER_IMAGE = process.env.VERIFIER_IMAGE || 'ink-verifier:develop'
-const CACHES_DIR = process.env.CACHES_DIR || path.resolve(__dirname, '../../tmp/caches')
+import { CACHES_DIR, MAX_CONTAINERS, VERIFIER_IMAGE } from '../config'
 
 const pexec = util.promisify(exec)
 

@@ -3,6 +3,7 @@ import UnderPressure from '@fastify/under-pressure'
 import Multipart from '@fastify/multipart'
 
 import { Upload } from './routes'
+import { SERVER_HOST, SERVER_PORT } from './config'
 
 const server: FastifyInstance = Fastify({
   logger: true
@@ -32,7 +33,10 @@ server.register(Upload)
 
 const start = async () => {
   try {
-    await server.listen({ port: 3000 })
+    await server.listen({ 
+      port: SERVER_PORT,
+      host: SERVER_HOST
+    })
   } catch (err) {
     server.log.error(err)
     process.exit(1)
