@@ -6,6 +6,7 @@ import Multipart from '@fastify/multipart'
 
 import { Upload } from './routes'
 import { OAS_URL, SERVER_HOST, SERVER_PORT } from './config'
+import onReady from './ready'
 
 function ajvPlugin (ajv : ajv.Ajv) {
   ajv.addKeyword('isFileType', {
@@ -61,6 +62,14 @@ server.get('/oas.json', {
 })
 
 server.register(Upload)
+
+server.ready(err => {
+  if (err) {
+    server.log.error(err)
+    throw err
+  }
+  onReady(server)
+})
 
 const start = async () => {
   try {
