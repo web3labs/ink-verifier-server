@@ -1,6 +1,5 @@
 import Fastify, { FastifyInstance } from 'fastify'
-import ajv from 'ajv'
-import Swagger from '@fastify/swagger'
+import Swagger, { JSONObject } from '@fastify/swagger'
 import UnderPressure from '@fastify/under-pressure'
 import Multipart from '@fastify/multipart'
 
@@ -8,21 +7,8 @@ import { Upload } from './routes'
 import { OAS_URL, SERVER_HOST, SERVER_PORT } from './config'
 import onReady from './ready'
 
-function ajvPlugin (ajv : ajv.Ajv) {
-  ajv.addKeyword('isFileType', {
-    compile: (schema, parent : {type?: string, isFileType?: boolean}, it) => {
-      // Change the schema type, as this is post validation it doesn't appear to error.
-      parent.type = 'file'
-      delete parent.isFileType
-      return () => true
-    }
-  })
-  return ajv
-}
-
 const server: FastifyInstance = Fastify({
-  logger: true,
-  ajv: { plugins: [ajvPlugin] }
+  logger: true
 })
 
 server.register(UnderPressure, {
@@ -32,7 +18,6 @@ server.register(UnderPressure, {
 })
 
 server.register(Multipart, {
-  attachFieldsToBody: true,
   limits: {
     fields: 0, // Max number of non-file fields
     fileSize: 1e+7, // For multipart forms, the max file size in bytes
@@ -51,6 +36,32 @@ server.register(Swagger, {
     servers: [{
       url: OAS_URL
     }]
+  },
+  transform: ({ schema, url }) => {
+    // Workaround for proper multi-part OpenAPI docs
+    if (url.startsWith('/upload')) {
+      const {
+        body,
+        ...transformed
+      } = schema
+      const json = transformed as unknown as JSONObject
+      json.body = {
+        type: 'object',
+        properties: {
+          package: {
+            format: 'binary',
+            type: 'file',
+            description: `The compressed archive expected by the
+            [Verifier Image](https://github.com/web3labs/ink-verifier/blob/main/README.md)
+            `
+          }
+        },
+        required: ['package']
+      }
+      return { schema: json, url }
+    } else {
+      return { schema: schema as unknown as JSONObject, url }
+    }
   }
 })
 

@@ -1,4 +1,3 @@
-import { MultipartFile } from '@fastify/multipart'
 import { FastifyPluginCallback } from 'fastify'
 
 import HttpError from '../errors'
@@ -7,10 +6,6 @@ import WorkMan from '../work/worker'
 interface UploadParams {
   network: string
   codeHash: string
-}
-
-interface UploadBody {
-  package: MultipartFile
 }
 
 /**
@@ -29,8 +24,7 @@ interface UploadBody {
  */
 const Upload : FastifyPluginCallback = (fastify, opts, done) => {
   fastify.post<{
-    Params: UploadParams,
-    Body: UploadBody
+    Params: UploadParams
   }>('/upload/:network/:codeHash', {
     schema: {
       description: 'Upload source code package',
@@ -50,23 +44,11 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
             description: 'The on-chain code hash for the contract source code'
           }
         }
-      },
-      body: {
-        type: 'object',
-        properties: {
-          package: {
-            format: 'binary',
-            isFileType: true,
-            description: `The compressed archive expected by the
-            [Verifier Image](https://github.com/web3labs/ink-verifier/blob/main/README.md)
-            `
-          }
-        },
-        required: ['package']
       }
+      // NOTE: There is no way to consume streams and validate the body
     }
   }, async (req, reply) => {
-    const data = req.body.package
+    const data = await req.file()
 
     if (data === undefined) {
       throw new HttpError('Please, specify compressed archive as file field', 400)
