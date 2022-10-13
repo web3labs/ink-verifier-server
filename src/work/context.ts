@@ -8,7 +8,6 @@ export class WorkContext {
   }
 
   addProc (p: ChildProcess) {
-    console.log('adding', p.pid)
     this.processes.push(p)
   }
 
