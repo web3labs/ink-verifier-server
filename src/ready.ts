@@ -4,6 +4,7 @@ import { exec } from 'node:child_process'
 
 import { BASE_DIR, DOCKER_ROOTLESS } from './config'
 import { FastifyInstance } from 'fastify'
+import workContext from './work/context'
 
 async function rootless (server: FastifyInstance) {
   // TODO: consider if this belongs here or better to move it out
@@ -32,6 +33,14 @@ function onReady (server: FastifyInstance) {
   if (DOCKER_ROOTLESS) {
     rootless(server)
   }
+
+  const EXIT_SIGNALS = [
+    'SIGINT',
+    'SIGTERM'
+  ]
+  EXIT_SIGNALS.forEach(eventName => {
+    process.on(eventName, workContext.onExit.bind(workContext))
+  })
 }
 
 export default onReady
