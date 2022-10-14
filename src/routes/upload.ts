@@ -44,6 +44,15 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
             description: 'The on-chain code hash for the contract source code'
           }
         }
+      },
+      response: {
+        201: {
+          location: { type: 'string' }
+        },
+        '4xx': {
+          code: { type: 'string' },
+          message: { type: 'string' }
+        }
       }
       // NOTE: There is no way to consume streams and validate the body
     }
@@ -80,7 +89,9 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
         // Roger, everything right to start processing
         await wm.startProcessing()
 
-        reply.send(200)
+        reply.status(201).send({
+          location: `/info/${network}/${codeHash}`
+        })
       }
     } catch (error) {
       file.resume()
