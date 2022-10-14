@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { FastifyBaseLogger } from 'fastify'
-import { CACHES_DIR, MAX_CONTAINERS, VERIFIER_IMAGE } from '../config'
+import { CACHES_DIR, DOCKER_RUN_PARAMS, MAX_CONTAINERS, VERIFIER_IMAGE } from '../config'
 import workContext, { WorkContext } from './context'
 
 interface RunOptions {
@@ -29,13 +29,19 @@ class Docker {
       '--rm',
       '--cidfile', path.resolve(processingDir, 'cid'),
       '--security-opt=no-new-privileges',
-      '--cap-drop', 'all',
+      // https://man7.org/linux/man-pages/man7/capabilities.7.html
+      '--cap-drop', 'all'
+    ]
+    if (DOCKER_RUN_PARAMS !== undefined) {
+      params.push(...DOCKER_RUN_PARAMS.split(' '))
+    }
+    params.push(...[
       '-v', `${processingDir}:/build`,
       '-v', `${path.resolve(CACHES_DIR, '.cache')}:/root/.cache`,
       '-v', `${path.resolve(CACHES_DIR, '.cargo', 'registry')}:/usr/local/cargo/registry`,
       '-v', `${path.resolve(CACHES_DIR, '.rustup')}:/usr/local/rustup`,
       VERIFIER_IMAGE
-    ]
+    ])
 
     const out = fs.openSync(path.resolve(processingDir, 'out.log'), 'a')
     const err = fs.openSync(path.resolve(processingDir, 'out.log'), 'a')
