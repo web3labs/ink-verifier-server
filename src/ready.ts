@@ -1,8 +1,8 @@
 import path from 'node:path'
 import fs from 'node:fs'
+import { FastifyInstance } from 'fastify'
 
 import { BASE_DIR } from './config'
-import { FastifyInstance } from 'fastify'
 import workContext from './work/context'
 
 function onReady (server: FastifyInstance) {

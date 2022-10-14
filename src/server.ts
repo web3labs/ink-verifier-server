@@ -1,4 +1,4 @@
-import Fastify, { FastifyInstance } from 'fastify'
+import Fastify from 'fastify'
 import Swagger, { JSONObject } from '@fastify/swagger'
 import UnderPressure from '@fastify/under-pressure'
 import Multipart from '@fastify/multipart'
@@ -7,7 +7,7 @@ import { Upload } from './routes'
 import { OAS_URL, SERVER_HOST, SERVER_PORT } from './config'
 import onReady from './ready'
 
-const server: FastifyInstance = Fastify({
+const server = Fastify({
   logger: true
 })
 
