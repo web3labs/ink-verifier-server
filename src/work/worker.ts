@@ -121,7 +121,9 @@ class WorkMan {
 
   successHandler () {
     this.prepareDirectory(this.publishDir)
+    // TODO: remove src/target/ before rename or after?
     fs.renameSync(path.resolve(this.processingDir, 'package'), this.publishDir)
+    this.cleanDirectory(this.processingDir)
   }
 
   async errorHandler () {
@@ -134,7 +136,9 @@ class WorkMan {
       recursive: true
     })
 
-    fs.renameSync(this.processingDir, this.errorDir)
+    fs.renameSync(path.resolve(this.processingDir, 'out.log'), path.resolve(this.errorDir, 'out.log'))
+    fs.renameSync(path.resolve(this.processingDir, 'cid'), path.resolve(this.errorDir, 'cid'))
+    this.cleanDirectory(this.processingDir)
   }
 
   cleanStaging () {
