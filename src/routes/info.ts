@@ -1,23 +1,11 @@
 import { FastifyPluginCallback } from 'fastify'
 import * as fs from 'fs'
-import * as path from 'path'
-import { BASE_DIR, PUBLISH_DIR } from '../config'
 import HttpError from '../errors'
-
-interface InfoParams {
-  network: string
-  codeHash: string
-}
+import { NetworkCodeParams, NetworkCodePathSchema } from './common'
+import { VerifierLocations } from '../work/locations'
 
 /**
- * Endpoint to handle source package uploads for
- * a network and code hash.
- *
- * Rococo canvas example:
- * ```
- * curl --location --request POST 'http://127.0.0.1:3000/upload/rococoContracts/0x5160...e1f95' \
- *      --form 'package=@"./package.zip"'
- * ```
+ * Endpoint to get status information on the verification process.
  *
  * @param fastify The fatify instance
  * @param opts The fastify plug-in options
@@ -25,26 +13,11 @@ interface InfoParams {
  */
 const Info : FastifyPluginCallback = (fastify, opts, done) => {
   fastify.get<{
-    Params: InfoParams
+    Params: NetworkCodeParams
   }>('/info/:network/:codeHash', {
     schema: {
       description: 'Get verification info',
-      params: {
-        type: 'object',
-        properties: {
-          network: {
-            type: 'string',
-            description: `The network name to resolve the node endpoint by
-            [@polkadot/apps-config](https://github.com/polkadot-js/apps/tree/master/packages/apps-config/src/endpoints).
-            `,
-            default: 'rococoContracts'
-          },
-          codeHash: {
-            type: 'string',
-            description: 'The on-chain code hash for the contract source code'
-          }
-        }
-      },
+      params: NetworkCodePathSchema,
       response: {
         200: {
           status: { type: 'string' }
@@ -56,11 +29,14 @@ const Info : FastifyPluginCallback = (fastify, opts, done) => {
       }
     }
   }, async (req, reply) => {
-    const { network, codeHash } = req.params
-    const stagingDir = path.resolve(BASE_DIR, 'staging', network, codeHash)
-    const processingDir = path.resolve(BASE_DIR, 'processing', network, codeHash)
-    const errorDir = path.resolve(BASE_DIR, 'error', network, codeHash)
-    const publishDir = path.resolve(PUBLISH_DIR, network, codeHash)
+    const {
+      network,
+      codeHash,
+      publishDir,
+      processingDir,
+      stagingDir,
+      errorDir
+    } = new VerifierLocations(req.params)
 
     try {
       let status = ''

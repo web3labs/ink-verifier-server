@@ -2,11 +2,8 @@ import { FastifyPluginCallback } from 'fastify'
 
 import HttpError from '../errors'
 import WorkMan from '../work/worker'
-
-interface UploadParams {
-  network: string
-  codeHash: string
-}
+import { NetworkCodeParams, NetworkCodePathSchema } from './common'
+import { VerifierLocations } from '../work/locations'
 
 /**
  * Endpoint to handle source package uploads for
@@ -24,27 +21,12 @@ interface UploadParams {
  */
 const Upload : FastifyPluginCallback = (fastify, opts, done) => {
   fastify.post<{
-    Params: UploadParams
+    Params: NetworkCodeParams
   }>('/upload/:network/:codeHash', {
     schema: {
       description: 'Upload source code package',
       consumes: ['multipart/form-data'],
-      params: {
-        type: 'object',
-        properties: {
-          network: {
-            type: 'string',
-            description: `The network name to resolve the node endpoint by
-            [@polkadot/apps-config](https://github.com/polkadot-js/apps/tree/master/packages/apps-config/src/endpoints).
-            `,
-            default: 'rococoContracts'
-          },
-          codeHash: {
-            type: 'string',
-            description: 'The on-chain code hash for the contract source code'
-          }
-        }
-      },
+      params: NetworkCodePathSchema,
       response: {
         201: {
           location: { type: 'string' }
@@ -63,11 +45,10 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
       throw new HttpError('Please, specify compressed archive as file field', 400)
     }
 
-    const { network, codeHash } = req.params
+    const locations = new VerifierLocations(req.params)
 
     const wm = new WorkMan({
-      network,
-      codeHash,
+      locations,
       log: fastify.log
     })
 
@@ -90,7 +71,7 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
         await wm.startProcessing()
 
         reply.status(201).send({
-          location: `/info/${network}/${codeHash}`
+          location: `/info/${locations.codeHashPath}`
         })
       }
     } catch (error) {

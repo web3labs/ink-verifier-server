@@ -2,8 +2,8 @@ import { FastifyBaseLogger } from 'fastify'
 import * as fs from 'fs'
 import * as path from 'path'
 import { Readable } from 'stream'
+import { VerifierLocations } from './locations'
 
-import { BASE_DIR, PUBLISH_DIR } from '../config'
 import HttpError from '../errors'
 import Docker from './docker'
 import { downloadByteCode } from './substrate'
@@ -11,8 +11,7 @@ import { downloadByteCode } from './substrate'
 const HEAD_BYTES = 4
 
 interface WorkParams {
-  network: string,
-  codeHash: string,
+  locations: VerifierLocations
   log: FastifyBaseLogger
 }
 
@@ -36,42 +35,32 @@ interface TypeInfo {
  * - Triggering Docker verification process
  */
 class WorkMan {
-  network: string
-  codeHash: string
-  stagingDir: string
-  processingDir: string
-  errorDir: string
-  publishDir: string
+  locations: VerifierLocations
   docker: Docker
   log: FastifyBaseLogger
 
-  constructor (params: WorkParams) {
-    this.network = String(params.network)
-    this.codeHash = String(params.codeHash)
-    this.log = params.log
-    this.stagingDir = path.resolve(BASE_DIR, 'staging', this.network, this.codeHash)
-    this.processingDir = path.resolve(BASE_DIR, 'processing', this.network, this.codeHash)
-    this.errorDir = path.resolve(BASE_DIR, 'error', this.network, this.codeHash)
-    this.publishDir = path.resolve(PUBLISH_DIR, this.network, this.codeHash)
-    this.docker = new Docker({
-      log: params.log
-    })
+  constructor ({ locations, log }: WorkParams) {
+    this.locations = locations
+    this.log = log
+    this.docker = new Docker({ log })
   }
 
   async checkForStaging () {
+    const locs = this.locations
+
     // Contract not verified
-    if (fs.existsSync(this.publishDir)) {
-      throw new HttpError(`${this.network}/${this.codeHash} is already verified.`, 400)
+    if (fs.existsSync(locs.publishDir)) {
+      throw new HttpError(`${locs.codeHashPath} is already verified.`, 400)
     }
 
     // Work load not in staging
-    if (fs.existsSync(this.stagingDir)) {
-      throw new HttpError(`Workload for ${this.network}/${this.codeHash} is staged for processing.`, 400)
+    if (fs.existsSync(locs.stagingDir)) {
+      throw new HttpError(`Workload for ${locs.codeHashPath} is staged for processing.`, 400)
     }
 
     // Work load not in processing
-    if (fs.existsSync(this.processingDir)) {
-      throw new HttpError(`Workload for ${this.network}/${this.codeHash} is in processing.`, 400)
+    if (fs.existsSync(locs.processingDir)) {
+      throw new HttpError(`Workload for ${locs.codeHashPath} is in processing.`, 400)
     }
 
     // We can run a new container
@@ -82,9 +71,9 @@ class WorkMan {
 
   async writePristine () {
     await downloadByteCode({
-      network: this.network,
-      codeHash: this.codeHash,
-      dst: path.resolve(this.stagingDir, 'pristine.wasm')
+      network: this.locations.network,
+      codeHash: this.locations.codeHash,
+      dst: path.resolve(this.locations.stagingDir, 'pristine.wasm')
     })
   }
 
@@ -96,7 +85,7 @@ class WorkMan {
     // Determine the mime type from file content
     // https://github.com/mscdex/busboy/issues/236
     const typeInfo = await resolveTypeInfo(head)
-    const dst = path.resolve(this.stagingDir, `package.${typeInfo.ext}`)
+    const dst = path.resolve(this.locations.stagingDir, `package.${typeInfo.ext}`)
     const dstStream = fs.createWriteStream(dst)
 
     // Note that pipe ends by default
@@ -104,49 +93,55 @@ class WorkMan {
   }
 
   async startProcessing () {
-    this.prepareDirectory(this.processingDir)
-    this.log.info(`Moving from ${this.stagingDir} to ${this.processingDir}`)
+    const locs = this.locations
+
+    this.prepareDirectory(locs.processingDir)
+    this.log.info(`Moving from ${locs.stagingDir} to ${locs.processingDir}`)
     // Assuming we are using the same device
-    fs.renameSync(this.stagingDir, this.processingDir)
+    fs.renameSync(locs.stagingDir, locs.processingDir)
 
     // Here max containers could be check again, but it implies to clean up
     // resources in case of max reached.
 
     this.docker.run({
-      processingDir: this.processingDir,
+      processingDir: locs.processingDir,
       successHandler: this.successHandler.bind(this),
       errorHandler: this.errorHandler.bind(this)
     })
   }
 
   successHandler () {
-    this.prepareDirectory(this.publishDir)
+    const locs = this.locations
+
+    this.prepareDirectory(locs.publishDir)
     // TODO: remove src/target/ before rename or after?
-    fs.renameSync(path.resolve(this.processingDir, 'package'), this.publishDir)
-    this.cleanDirectory(this.processingDir)
+    fs.renameSync(path.resolve(locs.processingDir, 'package'), locs.publishDir)
+    this.cleanDirectory(locs.processingDir)
   }
 
   async errorHandler () {
+    const locs = this.locations
+
     // If error directory already exists, assume it's an outdated error and clean up
-    if (fs.existsSync(this.errorDir)) {
-      this.cleanDirectory(this.errorDir)
+    if (fs.existsSync(locs.errorDir)) {
+      this.cleanDirectory(locs.errorDir)
     }
 
-    fs.mkdirSync(this.errorDir, {
+    fs.mkdirSync(locs.errorDir, {
       recursive: true
     })
 
-    fs.renameSync(path.resolve(this.processingDir, 'out.log'), path.resolve(this.errorDir, 'out.log'))
-    fs.renameSync(path.resolve(this.processingDir, 'cid'), path.resolve(this.errorDir, 'cid'))
-    this.cleanDirectory(this.processingDir)
+    fs.renameSync(path.resolve(locs.processingDir, 'out.log'), path.resolve(locs.errorDir, 'out.log'))
+    fs.renameSync(path.resolve(locs.processingDir, 'cid'), path.resolve(locs.errorDir, 'cid'))
+    this.cleanDirectory(locs.processingDir)
   }
 
   cleanStaging () {
-    this.cleanDirectory(this.stagingDir)
+    this.cleanDirectory(this.locations.stagingDir)
   }
 
   prepareStaging () {
-    this.prepareDirectory(this.stagingDir)
+    this.prepareDirectory(this.locations.stagingDir)
   }
 
   private cleanDirectory (dir: string) {
