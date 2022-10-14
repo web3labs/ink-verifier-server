@@ -24,13 +24,16 @@ interface TypeInfo {
 /**
  * This class manages the work load for contract verifications.
  *
+ * Note that it is expected to have a new work manager instance
+ * per contract verification, and that directories are in the context
+ * of a network and code hash.
+ *
  * Including:
- * - Working directory for the work loads
+ * - Handling directories for the contract work loads
  * - Checking the compressed archive type
- * - Writing the uploaded package to disk
+ * - Streaming the uploaded package to disk
  * - Downloading the pristine WASM from a Substrate chain
- * - Checking Docker work load processes
- * - Triggering Docker work load processing
+ * - Triggering Docker verification process
  */
 class WorkMan {
   network: string
@@ -56,8 +59,10 @@ class WorkMan {
   }
 
   async checkForStaging () {
-    // Work load not verified
-    // TBD
+    // Contract not verified
+    if (fs.existsSync(this.publishDir)) {
+      throw new HttpError(`${this.network}/${this.codeHash} is already verified.`, 400)
+    }
 
     // Work load not in staging
     if (fs.existsSync(this.stagingDir)) {
@@ -114,11 +119,9 @@ class WorkMan {
     })
   }
 
-  // how to test?
   successHandler () {
     this.prepareDirectory(this.publishDir)
-    // Probably we just want to move the package/ instead of the whole processingDir/
-    fs.renameSync(this.processingDir, this.publishDir)
+    fs.renameSync(path.resolve(this.processingDir, 'package'), this.publishDir)
   }
 
   async errorHandler () {
@@ -155,13 +158,6 @@ class WorkMan {
     fs.mkdirSync(dir, {
       recursive: true
     })
-
-    // TODO optionally if user-remap set
-    // if USER_REMAP==true
-    // TODO: SECURITY check
-    // fs.chmodSync(dir, 0o777) << viking
-    // myuser belongs to remapGroup as well
-    // fs.chownSync(dir, myuser, remapGroup) << least privilege
 
     this.log.info(`Created directory ${dir}`)
   }
