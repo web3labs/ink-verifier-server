@@ -3,7 +3,7 @@ import Swagger, { JSONObject } from '@fastify/swagger'
 import UnderPressure from '@fastify/under-pressure'
 import Multipart from '@fastify/multipart'
 
-import { Upload } from './routes'
+import { Upload, Info } from './routes'
 import { OAS_URL, SERVER_HOST, SERVER_PORT } from './config'
 import onReady from './ready'
 
@@ -73,6 +73,7 @@ server.get('/oas.json', {
 })
 
 server.register(Upload)
+server.register(Info)
 
 server.ready(err => {
   if (err) {
