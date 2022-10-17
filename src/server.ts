@@ -2,13 +2,20 @@ import Fastify from 'fastify'
 import Swagger, { JSONObject } from '@fastify/swagger'
 import UnderPressure from '@fastify/under-pressure'
 import Multipart from '@fastify/multipart'
+import WebSocket from '@fastify/websocket'
 
-import { Upload, Info } from './routes'
+import { Upload, Info, Tail } from './routes'
 import { OAS_URL, SERVER_HOST, SERVER_PORT } from './config'
 import onReady from './ready'
 
 const server = Fastify({
   logger: true
+})
+
+server.register(WebSocket, {
+  options: {
+    maxPayload: 1048576
+  }
 })
 
 server.register(UnderPressure, {
@@ -74,6 +81,7 @@ server.get('/oas.json', {
 
 server.register(Upload)
 server.register(Info)
+server.register(Tail)
 
 server.ready(err => {
   if (err) {
