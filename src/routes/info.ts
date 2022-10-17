@@ -16,7 +16,7 @@ const Info : FastifyPluginCallback = (fastify, opts, done) => {
     Params: NetworkCodeParams
   }>('/info/:network/:codeHash', {
     schema: {
-      description: 'Get verification info',
+      description: 'Get information on verification status of an uploaded source code.',
       params: NetworkCodePathSchema,
       response: {
         200: {
