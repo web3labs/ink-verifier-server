@@ -7,6 +7,7 @@ import { VerifierLocations } from './locations'
 import HttpError from '../errors'
 import Docker from './docker'
 import { downloadByteCode } from './substrate'
+import log from '../log'
 
 const HEAD_BYTES = 4
 
@@ -37,12 +38,10 @@ interface TypeInfo {
 class WorkMan {
   locations: VerifierLocations
   docker: Docker
-  log: FastifyBaseLogger
 
-  constructor ({ locations, log }: WorkParams) {
+  constructor ({ locations }: WorkParams) {
     this.locations = locations
-    this.log = log
-    this.docker = new Docker({ log })
+    this.docker = new Docker()
   }
 
   async checkForStaging () {
@@ -96,7 +95,7 @@ class WorkMan {
     const locs = this.locations
 
     this.prepareDirectory(locs.processingDir)
-    this.log.info(`Moving from ${locs.stagingDir} to ${locs.processingDir}`)
+    log.info(`Moving from ${locs.stagingDir} to ${locs.processingDir}`)
     // Assuming we are using the same device
     fs.renameSync(locs.stagingDir, locs.processingDir)
 
@@ -145,7 +144,7 @@ class WorkMan {
   }
 
   private cleanDirectory (dir: string) {
-    this.log.info(`Cleaning up directory ${dir}`)
+    log.info(`Cleaning up directory ${dir}`)
     fs.rmSync(dir, { recursive: true, force: true })
   }
 
@@ -158,7 +157,7 @@ class WorkMan {
       recursive: true
     })
 
-    this.log.info(`Created directory ${dir}`)
+    log.info(`Created directory ${dir}`)
   }
 }
 

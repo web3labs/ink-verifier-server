@@ -1,9 +1,9 @@
 import { spawn } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
-import { FastifyBaseLogger } from 'fastify'
 import { CACHES_DIR, DOCKER_RUN_PARAMS, MAX_CONTAINERS, VERIFIER_IMAGE } from '../config'
 import workContext, { WorkContext } from './context'
+import log from '../log'
 
 interface RunOptions {
   processingDir: string,
@@ -12,11 +12,9 @@ interface RunOptions {
 }
 
 class Docker {
-  log: FastifyBaseLogger
   context: WorkContext
 
-  constructor ({ log }: {log: FastifyBaseLogger}) {
-    this.log = log
+  constructor () {
     this.context = workContext
   }
 
@@ -52,12 +50,12 @@ class Docker {
       stdio: ['ignore', out, err]
     })
 
-    this.log.info(`Running verification (${p.pid})`)
+    log.info(`Running verification (${p.pid})`)
 
     this.context.addProc(p)
 
     p.on('close', (code) => {
-      this.log.info(`${p.pid} exit ${code}`)
+      log.info(`${p.pid} exit ${code}`)
 
       this.context.rmProc(p)
 
