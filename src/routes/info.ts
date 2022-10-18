@@ -49,7 +49,7 @@ const Info : FastifyPluginCallback = (fastify, opts, done) => {
       } else if (fs.existsSync(errorDir)) {
         status = 'error'
       } else {
-        throw new HttpError(`Contract [${codeHash}] in network [${network}] not found`, 404)
+        return new HttpError(`Contract [${codeHash}] in network [${network}] not found`, 404)
       }
 
       reply.status(200).send({
