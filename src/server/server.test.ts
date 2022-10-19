@@ -38,6 +38,13 @@ describe('server', () => {
   })
 
   describe('upload endpoint', () => {
+    const MockedWorkMan = jest.mocked(WorkMan)
+
+    beforeEach(() => {
+      // Clears the record of calls to the mock constructor function and its methods
+      MockedWorkMan.mockRestore()
+    })
+
     it('should return error if no file is uploaded', async () => {
       const response = await server.inject({
         method: 'POST',
@@ -47,6 +54,28 @@ describe('server', () => {
       expect(response).toBeDefined()
       expect(response.statusCode).toBe(406)
       expect(response.json()).toEqual({ code: 'FST_INVALID_MULTIPART_CONTENT_TYPE', message: 'the request is not multipart' })
+    })
+
+    it('should clean staging directory if processing is not started succesfully', async () => {
+      MockedWorkMan.prototype.prepareStaging.mockImplementation(() => { throw new Error('Oops') })
+      const mockCleanStaging = jest.spyOn(MockedWorkMan.prototype, 'cleanStaging')
+
+      const form = new FormData()
+      form.append('file', fs.createReadStream(
+        path.resolve(__dirname, '../../__data__/mockArchive.zip')
+      ))
+      const response = await server.inject({
+        method: 'POST',
+        url: '/upload/rococoContracts/0x',
+        payload: form,
+        headers: form.getHeaders()
+      })
+
+      expect(mockCleanStaging).toBeCalled()
+      expect(response).toBeDefined()
+      expect(response.statusCode).toBe(400)
+      expect(response.json()).toEqual({ message: 'Oops' })
+      MockedWorkMan.prototype.prepareStaging.mockRestore()
     })
 
     it('should return success if file is uploaded', async () => {
