@@ -82,6 +82,15 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Fetch Open API Documentation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
 		}
 	]
 }
