@@ -51,7 +51,9 @@ describe('set up Fastify server', () => {
 
     it('should return success if file is uploaded', async () => {
       const form = new FormData()
-      form.append('file', fs.createReadStream(path.resolve(__dirname, './_data/resources/mockArchive.zip')))
+      form.append('file', fs.createReadStream(
+        path.resolve(__dirname, '../__data__/resources/mockArchive.zip')
+      ))
       const response = await server.inject({
         method: 'POST',
         url: '/upload/rococoContracts/0x',
