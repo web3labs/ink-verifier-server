@@ -2,10 +2,10 @@
   "name": "ink-verifier-server",
   "version": "1.0.0",
   "description": "",
-  "main": "boot.js",
+  "main": "start.js",
   "scripts": {
     "start:dev": "nodemon",
-    "start": "npm run build && node build/boot.js",
+    "start": "npm run build && node build/start.js",
     "build": "rimraf ./build && npx tsc",
     "lint": "eslint . --ext .ts --fix",
     "test": "jest --verbose --maxWorkers=1",

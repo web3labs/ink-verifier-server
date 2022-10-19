@@ -4,8 +4,8 @@ import UnderPressure from '@fastify/under-pressure'
 import Multipart from '@fastify/multipart'
 import WebSocket from '@fastify/websocket'
 
-import { Upload, Info, Tail } from './routes'
-import { OAS_URL } from './config'
+import { Upload, Info, Tail } from '../routes'
+import { OAS_URL } from '../config'
 
 function Server (config: FastifyServerOptions) {
   const server = Fastify(config)

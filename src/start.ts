@@ -1,7 +1,7 @@
 import { SERVER_HOST, SERVER_PORT } from './config'
 import log from './log'
-import onReady from './ready'
-import Server from './server'
+import onReady from './server/ready'
+import Server from './server/server'
 
 const server = Server({
   logger: log

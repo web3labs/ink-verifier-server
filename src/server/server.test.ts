@@ -3,9 +3,9 @@ import fs from 'fs'
 import path from 'path'
 import FormData from 'form-data'
 
-import { SERVER_PORT, SERVER_HOST } from './config'
+import { SERVER_PORT, SERVER_HOST } from '../config'
 import Server from './server'
-import WorkMan from './work/worker'
+import WorkMan from '../work/worker'
 
 jest.mock('./work/worker')
 
