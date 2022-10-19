@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { createWsEndpoints } from '@polkadot/apps-config/endpoints'
@@ -7,7 +7,7 @@ import HttpError from '../errors'
 
 function hasContractsPallet (api: ApiPromise) : boolean {
   return Object.entries(api.query)
-    .find(([section, _]) => section === 'contracts') !==
+    .find(([section]) => section === 'contracts') !==
     undefined
 }
 
