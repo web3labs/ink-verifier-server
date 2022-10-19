@@ -27,7 +27,7 @@ const Tail : FastifyPluginCallback = (fastify, opts, done) => {
         tail.stdout.on('data', data => {
           conn.socket.send(data.toString('utf-8'))
         })
-        fs.watchFile(logPath, { interval: 1000 }, (curr, prev) => {
+        fs.watchFile(logPath, { interval: 1000 }, (curr) => {
           // The file is moved
           if (curr.ctimeMs === 0 &&
                 curr.atimeMs === 0 &&
