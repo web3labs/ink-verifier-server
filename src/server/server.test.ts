@@ -9,7 +9,7 @@ import WorkMan from '../work/worker'
 
 jest.mock('../work/worker')
 
-describe('set up Fastify server', () => {
+describe('server', () => {
   let server: FastifyInstance
 
   beforeAll(async () => {
