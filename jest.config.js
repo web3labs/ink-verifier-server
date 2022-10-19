@@ -4,6 +4,7 @@ module.exports = {
   testEnvironment: 'node',
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$',
   coveragePathIgnorePatterns: [
-    '<rootDir>/src/start.ts'
+    '<rootDir>/src/start.ts',
+    '<rootDir>/src/routes/tail.ts'
   ]
 }
