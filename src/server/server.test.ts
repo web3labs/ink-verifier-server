@@ -7,7 +7,7 @@ import { SERVER_PORT, SERVER_HOST } from '../config'
 import Server from './server'
 import WorkMan from '../work/worker'
 
-jest.mock('./work/worker')
+jest.mock('../work/worker')
 
 describe('set up Fastify server', () => {
   let server: FastifyInstance
@@ -52,7 +52,7 @@ describe('set up Fastify server', () => {
     it('should return success if file is uploaded', async () => {
       const form = new FormData()
       form.append('file', fs.createReadStream(
-        path.resolve(__dirname, '../__data__/mockArchive.zip')
+        path.resolve(__dirname, '../../__data__/mockArchive.zip')
       ))
       const response = await server.inject({
         method: 'POST',

@@ -9,7 +9,7 @@
     "build": "rimraf ./build && npx tsc",
     "lint": "eslint . --ext .ts --fix",
     "test": "jest --verbose --maxWorkers=1",
-    "test:coverage": "npm test -- --coverage --collectCoverageFrom='src/**/*.{ts,jxs}'"
+    "test:coverage": "npm test -- --coverage --collectCoverageFrom='src/**/*.ts'"
   },
   "author": "OM Team",
   "license": "ISC",
