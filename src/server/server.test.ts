@@ -67,4 +67,18 @@ describe('server', () => {
       expect(response.json()).toEqual({ location: '/info/rococoContracts/0x' })
     })
   })
+
+  describe('documentation endpoint', () => {
+    it('should serve Swagger docs', async () => {
+      const mockSwagger = jest.spyOn(server, 'swagger').mockImplementation()
+      const response = await server.inject({
+        method: 'GET',
+        url: '/oas.json'
+      })
+      expect(response).toBeDefined()
+      expect(response.statusCode).toBe(200)
+      expect(mockSwagger).toBeCalled()
+      mockSwagger.mockRestore()
+    })
+  })
 })
