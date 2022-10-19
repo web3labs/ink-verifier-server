@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "44fbee3f-5f4b-44d8-90df-d5a1715f2d81",
-		"name": "Ink Verifier Server",
+		"name": "Ink Verifier Server API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -16,26 +16,26 @@
 						{
 							"key": "package",
 							"type": "file",
-							"src": "<YOUR_PATH>/ink-build-test/package.zip"
+							"src": "/home/marc/Downloads/package.zip"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{SERVER}}/upload/rococoContracts/0x51606b677cc203a561cd0cfbba708024feb85f46fe42238afc55a115785e1f95",
+					"raw": "{{SERVER}}/upload/shibuya/0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"upload",
-						"rococoContracts",
-						"0x51606b677cc203a561cd0cfbba708024feb85f46fe42238afc55a115785e1f95"
+						"shibuya",
+						"0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Status Check",
+			"name": "Check Server Status",
 			"event": [
 				{
 					"listen": "test",
@@ -59,6 +59,25 @@
 					],
 					"path": [
 						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Verification Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/info/shibuya/0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"info",
+						"shibuya",
+						"0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17"
 					]
 				}
 			},
