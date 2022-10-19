@@ -12,6 +12,7 @@ const Tail : FastifyPluginCallback = (fastify, opts, done) => {
     }>('/tail/:network/:codeHash', {
       websocket: true,
       schema: {
+        hide: true,
         description: 'Tail processing log.',
         params: NetworkCodePathSchema
       }
