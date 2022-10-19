@@ -4,6 +4,14 @@ import HttpError from '../errors'
 import { NetworkCodeParams, NetworkCodePathSchema } from './common'
 import { VerifierLocations } from '../work/locations'
 
+enum Status {
+  'unknown' = 'unknown',
+  'verified' = 'verified',
+  'processing' = 'processing',
+  'staging' = 'staging',
+  'error' = 'error',
+}
+
 /**
  * Endpoint to get status information on the verification process.
  *
@@ -20,7 +28,9 @@ const Info : FastifyPluginCallback = (fastify, opts, done) => {
       params: NetworkCodePathSchema,
       response: {
         200: {
-          status: { type: 'string' }
+          status: {
+            enum: Object.keys(Status)
+          }
         },
         '4xx': {
           code: { type: 'string' },
@@ -39,15 +49,15 @@ const Info : FastifyPluginCallback = (fastify, opts, done) => {
     } = new VerifierLocations(req.params)
 
     try {
-      let status = ''
+      let status : Status = Status.unknown
       if (fs.existsSync(publishDir)) {
-        status = 'verified'
+        status = Status.verified
       } else if (fs.existsSync(processingDir)) {
-        status = 'processing'
+        status = Status.processing
       } else if (fs.existsSync(stagingDir)) {
-        status = 'staging'
+        status = Status.staging
       } else if (fs.existsSync(errorDir)) {
-        status = 'error'
+        status = Status.error
       } else {
         return new HttpError(`Contract [${codeHash}] in network [${network}] not found`, 404)
       }
