@@ -47,10 +47,7 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
 
     const locations = new VerifierLocations(req.params)
 
-    const wm = new WorkMan({
-      locations,
-      log: fastify.log
-    })
+    const wm = new WorkMan({ locations })
 
     await wm.checkForStaging()
 

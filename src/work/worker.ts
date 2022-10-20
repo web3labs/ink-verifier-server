@@ -1,5 +1,4 @@
-import { FastifyBaseLogger } from 'fastify'
-import * as fs from 'fs'
+import fs from 'node:fs'
 import * as path from 'path'
 import { Readable } from 'stream'
 import { VerifierLocations } from './locations'
@@ -10,11 +9,6 @@ import { downloadByteCode } from './substrate'
 import log from '../log'
 
 const HEAD_BYTES = 4
-
-interface WorkParams {
-  locations: VerifierLocations
-  log: FastifyBaseLogger
-}
 
 interface TypeInfo {
   ext: string
@@ -39,7 +33,7 @@ class WorkMan {
   locations: VerifierLocations
   docker: Docker
 
-  constructor ({ locations }: WorkParams) {
+  constructor ({ locations }: { locations: VerifierLocations }) {
     this.locations = locations
     this.docker = new Docker()
   }
