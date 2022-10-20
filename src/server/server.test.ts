@@ -1,12 +1,21 @@
-import { FastifyInstance } from 'fastify'
-import fs from 'fs'
+import Fastify, { FastifyInstance } from 'fastify'
+import fs from 'node:fs'
 import path from 'path'
 import FormData from 'form-data'
+import Multipart from '@fastify/multipart'
 
 import Server from './server'
 import WorkMan from '../work/worker'
+import { Upload } from '../routes'
 
 jest.mock('../work/worker')
+
+jest.mock('node:fs', () => (
+  {
+    ...jest.requireActual('node:fs'),
+    existsSync: jest.fn()
+  }
+))
 
 describe('server', () => {
   let server: FastifyInstance
@@ -30,6 +39,19 @@ describe('server', () => {
 
       expect(response).toBeDefined()
       expect(response.statusCode).toBe(404)
+    })
+
+    it('should return verified status for verified contract', async () => {
+      const existsSyncSpy = jest.spyOn(fs, 'existsSync')
+      existsSyncSpy.mockReturnValueOnce(true)
+      const response = await server.inject({
+        method: 'GET',
+        url: '/info/rococoContracts/0x'
+      })
+
+      expect(response).toBeDefined()
+      expect(response.statusCode).toBe(200)
+      expect(response.json()).toEqual({ status: 'verified' })
     })
   })
 
@@ -90,6 +112,43 @@ describe('server', () => {
       expect(response).toBeDefined()
       expect(response.statusCode).toBe(201)
       expect(response.json()).toEqual({ location: '/info/rococoContracts/0x' })
+    })
+
+    it('should return error if file is truncated', async () => {
+      const cleanStagingSpy = jest.spyOn(WorkMan.prototype, 'cleanStaging')
+
+      // Need a new fastify instance to register multipart plugin with tiny file size limit
+      const fastify = Fastify()
+      fastify.register(Multipart, {
+        limits: {
+          fields: 0,
+          fileSize: 1, // 1 byte file size limit to test truncated
+          files: 1,
+          headerPairs: 200
+        }
+      })
+      fastify.register(Upload)
+
+      await fastify.listen({ port: 0 })
+
+      const form = new FormData()
+      form.append('file', fs.createReadStream(
+        path.resolve(__dirname, '../../__data__/mockZip.zip')
+      ))
+      const response = await fastify.inject({
+        method: 'POST',
+        url: '/upload/rococoContracts/0x',
+        payload: form,
+        headers: form.getHeaders()
+      })
+
+      expect(cleanStagingSpy).toBeCalled()
+      expect(response).toBeDefined()
+      expect(response.statusCode).toBe(413)
+      expect(response.statusMessage).toBe('Payload Too Large')
+      expect(response.json()).toEqual({ code: 'FST_FILES_LIMIT', message: 'reach files limit' })
+
+      await fastify.close()
     })
   })
 
