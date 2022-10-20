@@ -3,7 +3,6 @@ import fs from 'fs'
 import path from 'path'
 import FormData from 'form-data'
 
-import { SERVER_PORT, SERVER_HOST } from '../config'
 import Server from './server'
 import WorkMan from '../work/worker'
 
@@ -15,10 +14,7 @@ describe('server', () => {
   beforeAll(async () => {
     // run the server instance we are testing against
     server = Server({})
-    await server.listen({
-      port: SERVER_PORT,
-      host: SERVER_HOST
-    })
+    await server.listen({ port: 0 })
   })
 
   afterAll(async () => {
