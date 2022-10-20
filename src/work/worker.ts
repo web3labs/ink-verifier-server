@@ -112,7 +112,7 @@ class WorkMan {
     this.cleanDirectory(locs.processingDir)
   }
 
-  async errorHandler () {
+  errorHandler () {
     const locs = this.locations
 
     // If error directory already exists, assume it's an outdated error and clean up
@@ -171,7 +171,7 @@ function checkBytes (buffer: Buffer, headers: number[]) {
   return true
 }
 
-async function resolveTypeInfo (buffer: Buffer) : Promise<TypeInfo> {
+export async function resolveTypeInfo (buffer: Buffer) : Promise<TypeInfo> {
   if (checkBytes(buffer, [0x50, 0x4B, 0x3, 0x4])) {
     return {
       ext: 'zip',
