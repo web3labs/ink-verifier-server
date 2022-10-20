@@ -67,7 +67,7 @@ class Docker {
     })
   }
 
-  async canRunMore () {
+  canRunMore () {
     return this.context.runningProcs <= MAX_CONTAINERS
   }
 }
