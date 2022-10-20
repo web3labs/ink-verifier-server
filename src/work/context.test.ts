@@ -10,7 +10,7 @@ class MockChildProcess extends EventEmitter {
     this.pid = pid
   }
 
-  kill (signal: number | undefined) {
+  kill () {
     return true
   }
 }
@@ -62,7 +62,7 @@ describe('work context', () => {
 
   it('should kill child processes with signal 9 if kill fails before exiting', () => {
     const cp = spawn('123')
-    const mockKill = jest.spyOn(cp, 'kill').mockImplementation(signal => { return false })
+    const mockKill = jest.spyOn(cp, 'kill').mockImplementation(() => { return false })
 
     workContext.addProc(cp)
     workContext.onExit('kill', 0)
