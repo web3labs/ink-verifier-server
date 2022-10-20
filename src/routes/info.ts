@@ -1,5 +1,5 @@
 import { FastifyPluginCallback } from 'fastify'
-import * as fs from 'fs'
+import fs from 'node:fs'
 import HttpError from '../errors'
 import { NetworkCodeParams, NetworkCodePathSchema } from './common'
 import { VerifierLocations } from '../work/locations'

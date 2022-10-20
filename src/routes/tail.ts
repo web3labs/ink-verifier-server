@@ -1,4 +1,4 @@
-import * as fs from 'fs'
+import fs from 'node:fs'
 import { spawn } from 'node:child_process'
 import path from 'node:path'
 import { FastifyPluginCallback } from 'fastify'
