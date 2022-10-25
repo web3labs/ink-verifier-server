@@ -1,22 +1,30 @@
-# Ink Verifier Server
+# Verifier Server for Ink!
 
 Server for Ink! source code verification.
+
+Features:
+
+- Uploading verifiable source code packages
+- Tracking the status of the verification process
+- Downloading the verified artifacts
+
+Please, go to [ink-verifier](https://github.com/web3labs/ink-verifier) for information on how to generate the verifiable source code packages.
 
 ## Configuration
 
 The configuration uses the environment variables described in the table below.
 
-|Name|Description|
-|----|-----------|
-|SERVER_HOST| |
-|SERVER_PORT| |
-|OAS_URL| |
-|BASE_DIR|Base directory for verification pipeline stages|
-|PUBLISH_DIR|Base directory for long-term access to successfully verified artefacts|
-|MAX_CONTAINERS|Maximum number of running containers|
-|VERIFIER_IMAGE| |
-|DOCKER_RUN_PARAMS| |
-|CACHES_DIR| |
+|Name|Description|Defaults|
+|----|-----------|--------|
+|SERVER_HOST|The server host address. e.g. 0.0.0.0|`127.0.0.1`|
+|SERVER_PORT|The server port to listen to|`3000`|
+|OAS_URL|The external URL of the server for the Opean Api docs|`http://${SERVER_HOST}:${SERVER_PORT}`|
+|BASE_DIR|Base directory for verification pipeline stages|`:project_root_dir/tmp`|
+|CACHES_DIR|The base directory for caches|`:project_root_dir/tmp/caches`|
+|PUBLISH_DIR|Base directory for long-term access to successfully verified artefacts|`:project_root_dir/publish`|
+|MAX_CONTAINERS|Maximum number of running containers|`5`|
+|VERIFIER_IMAGE|The ink-verifier container image to be used for verification|`ink-verifier:develop`|
+|DOCKER_RUN_PARAMS|Additional parameters for the conainter engine|n/a|
 
 The server has support for `.env` files.
 
@@ -55,5 +63,7 @@ The server has support for `.env` files.
 
 ## Technical Notes
 
-Substrate network endpoint resolution
+### Network Names
+
+We are using [@polkadot/apps-config](https://github.com/polkadot-js/apps/tree/master/packages/apps-config) to resolve the network endpoints by name. You can find the available endpoints in the [endpoints directory](https://github.com/polkadot-js/apps/tree/master/packages/apps-config/src/endpoints).
 
