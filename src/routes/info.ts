@@ -40,8 +40,6 @@ const Info : FastifyPluginCallback = (fastify, opts, done) => {
     }
   }, async (req, reply) => {
     const {
-      network,
-      codeHash,
       publishDir,
       processingDir,
       stagingDir,
@@ -59,7 +57,7 @@ const Info : FastifyPluginCallback = (fastify, opts, done) => {
       } else if (fs.existsSync(errorDir)) {
         status = Status.error
       } else {
-        return new HttpError(`Contract [${codeHash}] in network [${network}] not found`, 404)
+        status = Status.unknown
       }
 
       reply.status(200).send({
