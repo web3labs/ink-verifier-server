@@ -31,18 +31,21 @@ describe('server', () => {
   })
 
   describe('info endpoint', () => {
-    it('should return 404 for non-existent contract', async () => {
+    const existsSyncSpy = jest.spyOn(fs, 'existsSync')
+
+    it('should return unverified for non-existent contract', async () => {
+      existsSyncSpy.mockReturnValue(false)
       const response = await server.inject({
         method: 'GET',
         url: '/info/rococoContracts/0x'
       })
 
       expect(response).toBeDefined()
-      expect(response.statusCode).toBe(404)
+      expect(response.json()).toEqual({ status: 'unverified' })
+      existsSyncSpy.mockRestore()
     })
 
     it('should return verified status for verified contract', async () => {
-      const existsSyncSpy = jest.spyOn(fs, 'existsSync')
       existsSyncSpy.mockReturnValueOnce(true)
       const response = await server.inject({
         method: 'GET',
