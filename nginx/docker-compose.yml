@@ -1,21 +1,22 @@
-web:
-  image: nginx
-  volumes:
-   - ./templates:/etc/nginx/templates
-   - ${DIR_PUBLISH}:/www/data:ro
-   - ${DIR_PROCESSING}:/www/processing:ro
-   - ${DIR_ERROR}:/www/error:ro
-  ports:
-   - "8080:80"
-  environment:
-   - NGINX_PORT=80
-   - NGINX_HOST=localhost
-   # The trailing slash makes it absolute in proxy pass
-   - API_URL=http://host.docker.internal:3000/
-  extra_hosts:
-    # Note that this don't work in a rootless setup
-    - "host.docker.internal:host-gateway"
-    # Bind it to a public interface in the host for rootless 
-    # Tip: you can add a new private IP for this purpose
-    # using `ip address add` or editing the networks/interface config 
-    # - "host.docker.internal:192.168.0.143"
+services:
+  web:
+    image: nginx
+    volumes:
+    - ./templates:/etc/nginx/templates
+    - ${DIR_PUBLISH}:/www/data:ro
+    - ${DIR_PROCESSING}:/www/processing:ro
+    - ${DIR_ERROR}:/www/error:ro
+    ports:
+    - "8080:80"
+    environment:
+    - NGINX_PORT=80
+    - NGINX_HOST=localhost
+    # The trailing slash makes it absolute in proxy pass
+    - API_URL=http://host.docker.internal:3000/
+    extra_hosts:
+      # Note that this don't work in a rootless setup
+      - "host.docker.internal:host-gateway"
+      # Bind it to a public interface in the host for rootless 
+      # Tip: you can add a new private IP for this purpose
+      # using `ip address add` or editing the networks/interface config 
+      # - "host.docker.internal:192.168.0.143"
