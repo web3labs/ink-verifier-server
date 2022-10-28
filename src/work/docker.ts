@@ -35,7 +35,6 @@ class Docker {
     }
     params.push(...[
       '-v', `${processingDir}:/build`,
-      '-v', `${path.resolve(CACHES_DIR, '.cache')}:/root/.cache`,
       '-v', `${path.resolve(CACHES_DIR, '.cargo', 'registry')}:/usr/local/cargo/registry`,
       '-v', `${path.resolve(CACHES_DIR, '.rustup')}:/usr/local/rustup`,
       VERIFIER_IMAGE
