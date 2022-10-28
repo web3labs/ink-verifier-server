@@ -124,8 +124,16 @@ class WorkMan {
       recursive: true
     })
 
-    fs.renameSync(path.resolve(locs.processingDir, 'out.log'), path.resolve(locs.errorDir, 'out.log'))
-    fs.renameSync(path.resolve(locs.processingDir, 'cid'), path.resolve(locs.errorDir, 'cid'))
+    const plog = path.resolve(locs.processingDir, 'out.log')
+    const pcid = path.resolve(locs.processingDir, 'cid')
+
+    if (fs.existsSync(plog)) {
+      fs.renameSync(plog, path.resolve(locs.errorDir, 'out.log'))
+    }
+    if (fs.existsSync(pcid)) {
+      fs.renameSync(pcid, path.resolve(locs.errorDir, 'cid'))
+    }
+
     this.cleanDirectory(locs.processingDir)
   }
 
