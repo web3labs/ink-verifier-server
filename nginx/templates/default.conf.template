@@ -71,6 +71,12 @@ server {
     proxy_set_header X-Forwarded-Prefix /api;
     proxy_set_header X-Forwarded-Host ${NGINX_HOST};
     proxy_set_header X-Forwarded-Proto https;
+
+    proxy_hide_header Access-Control-Allow-Origin;
+    proxy_hide_header Access-Control-Allow-Credentials;
+    proxy_hide_header Access-Control-Allow-Methods;
+    proxy_hide_header Access-Control-Allow-Headers;
+
     proxy_pass ${API_URL};
   }
 }
