@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
-import { CACHES_DIR, DOCKER_RUN_PARAMS, MAX_CONTAINERS, VERIFIER_IMAGE } from '../config'
+import { CACHES_DIR, CONTAINER_ENGINE, CONTAINER_RUN_PARAMS, MAX_CONTAINERS, VERIFIER_IMAGE } from '../config'
 import workContext, { WorkContext } from './context'
 import log from '../log'
 
@@ -30,8 +30,8 @@ class Docker {
       // https://man7.org/linux/man-pages/man7/capabilities.7.html
       '--cap-drop', 'all'
     ]
-    if (DOCKER_RUN_PARAMS !== undefined) {
-      params.push(...DOCKER_RUN_PARAMS.split(' '))
+    if (CONTAINER_RUN_PARAMS !== undefined) {
+      params.push(...CONTAINER_RUN_PARAMS.split(' '))
     }
     params.push(...[
       '-v', `${processingDir}:/build`,
@@ -45,7 +45,7 @@ class Docker {
     const err = fs.openSync(path.resolve(processingDir, 'out.log'), 'a')
 
     // Note that parent will wait the sub-process to finish
-    const p = spawn('docker', params, {
+    const p = spawn(CONTAINER_ENGINE, params, {
       detached: true,
       stdio: ['ignore', out, err]
     })

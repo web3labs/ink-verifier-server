@@ -24,7 +24,8 @@ The configuration uses the environment variables described in the table below.
 |PUBLISH_DIR|Base directory for long-term access to successfully verified artefacts|`:project_root_dir/publish`|
 |MAX_CONTAINERS|Maximum number of running containers|`5`|
 |VERIFIER_IMAGE|The ink-verifier container image to be used for verification|`ink-verifier:develop`|
-|DOCKER_RUN_PARAMS|Additional parameters for the conainter engine|n/a|
+|CONTAINER_ENGINE|The container engine executable|`docker`|
+|CONTAINER_RUN_PARAMS|Additional parameters for the conainter engine|n/a|
 
 The server has support for `.env` files.
 
