@@ -13,6 +13,7 @@ services:
     - NGINX_HOST=localhost
     # The trailing slash makes it absolute in proxy pass
     - API_URL=http://host.docker.internal:3000/
+    - API_WS_HOST=host.docker.internal:3000
     extra_hosts:
       # Note that this don't work in a rootless setup
       - "host.docker.internal:host-gateway"
