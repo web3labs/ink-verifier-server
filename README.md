@@ -42,7 +42,7 @@ The server has support for `.env` files.
 * Staging: `$BASE_DIR/staging/:network/:code-hash`
 * Processing: `$BASE_DIR/processing/:network/:code-hash`
 * Errors: `$BASE_DIR/errors/:network/:code-hash`
-* Publish: `$PUBLISH_DIR/:network/:code-hash`
+* Publish: `$PUBLISH_DIR/:code-hash`
 
 ### Process Overview
 
@@ -63,6 +63,11 @@ The server has support for `.env` files.
 7. On the event of container exit the server moves the verified artificats to the publish directory if the verification was successful, otherwise keeps a log in the errors directory
 
 ## Technical Notes
+
+### Publish Directory
+
+The publish directory is not segmented by network name because the code hashes are content-addressable, i.e. the same for all networks.
+For source code verification the network name is required to download the uploaded pristine bytecode.
 
 ### Network Names
 
