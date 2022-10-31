@@ -88,7 +88,73 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": null
+				"url": {
+					"raw": "{{SERVER}}/oas.json",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"oas.json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Contract Sources List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/contracts/0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17/src",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"contracts",
+						"0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17",
+						"src"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Contract File",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/contracts/0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17/src/lib.rs",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"contracts",
+						"0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17",
+						"src",
+						"lib.rs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Contract Metadata",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/contracts/0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17/metadata.json",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"contracts",
+						"0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17",
+						"metadata.json"
+					]
+				}
 			},
 			"response": []
 		}
