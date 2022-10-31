@@ -7,13 +7,15 @@ export interface NetworkCodeParams extends CodeHashParams {
   network: string
 }
 
+const codeHash = {
+  type: 'string',
+  description: 'The on-chain content-addressable code hash for the contract source code'
+}
+
 export const CodeHashPathSchema = {
   type: 'object',
   properties: {
-    codeHash: {
-      type: 'string',
-      description: 'The on-chain content-addressable code hash for the contract source code'
-    }
+    codeHash
   }
 }
 
@@ -27,9 +29,6 @@ export const NetworkCodePathSchema = {
       `,
       default: 'rococoContracts'
     },
-    codeHash: {
-      type: 'string',
-      description: 'The on-chain code hash for the contract source code'
-    }
+    codeHash
   }
 }
