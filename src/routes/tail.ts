@@ -32,10 +32,10 @@ const Tail : FastifyPluginCallback = (fastify, opts, done) => {
         const tail = spawn('tail', ['-n', '+1', '-f', logPath])
 
         tail.stdout.on('data', data => {
-          conn.socket.send({
+          conn.socket.send(JSON.stringify({
             type: MessageType.LOG,
             data: data.toString('utf-8')
-          })
+          }))
         })
 
         fs.watchFile(logPath, { interval: 1000 }, (curr) => {
@@ -48,12 +48,12 @@ const Tail : FastifyPluginCallback = (fastify, opts, done) => {
 
             const success = fs.existsSync(publishDir)
 
-            conn.socket.send({
+            conn.socket.send(JSON.stringify({
               type: MessageType.EOT,
               // 0 -> OK
               // 1 -> KO
               data: Number(success)
-            })
+            }))
 
             conn.socket.close(1000)
           }
