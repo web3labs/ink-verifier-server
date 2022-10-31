@@ -17,7 +17,8 @@ export class VerifierLocations {
     this.stagingDir = path.resolve(BASE_DIR, 'staging', network, codeHash)
     this.processingDir = path.resolve(BASE_DIR, 'processing', network, codeHash)
     this.errorDir = path.resolve(BASE_DIR, 'error', network, codeHash)
-    this.publishDir = path.resolve(PUBLISH_DIR, network, codeHash)
+    // Code hash is content addressable, so it works for any
+    this.publishDir = path.resolve(PUBLISH_DIR, codeHash)
   }
 
   get codeHashPath () {

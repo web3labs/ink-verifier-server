@@ -60,7 +60,7 @@ const Info : FastifyPluginCallback = (fastify, opts, done) => {
         status = Status.unknown
       }
 
-      reply.status(200).send({
+      return reply.status(200).send({
         status
       })
     } catch (error) {

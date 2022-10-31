@@ -60,14 +60,14 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
 
       if (file.truncated) {
         wm.cleanStaging()
-        reply.send(new fastify.multipartErrors.FilesLimitError())
+        return reply.send(new fastify.multipartErrors.FilesLimitError())
       } else {
         await wm.writePristine()
 
         // Roger, everything right to start processing
         await wm.startProcessing()
 
-        reply.status(201).send({
+        return reply.status(201).send({
           location: `/info/${locations.codeHashPath}`
         })
       }

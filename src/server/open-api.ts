@@ -55,7 +55,7 @@ export default function registerOpenApi (server: FastifyInstance) {
   server.get('/oas.json', {
     schema: { hide: true },
     handler: function (req, reply) {
-      reply.send(server.swagger())
+      return reply.send(server.swagger())
     }
   })
 }

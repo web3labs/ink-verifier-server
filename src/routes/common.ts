@@ -1,8 +1,21 @@
 
-export interface NetworkCodeParams {
-    network: string
-    codeHash: string
+export interface CodeHashParams {
+  codeHash: string
+}
+
+export interface NetworkCodeParams extends CodeHashParams {
+  network: string
+}
+
+export const CodeHashPathSchema = {
+  type: 'object',
+  properties: {
+    codeHash: {
+      type: 'string',
+      description: 'The on-chain content-addressable code hash for the contract source code'
+    }
   }
+}
 
 export const NetworkCodePathSchema = {
   type: 'object',
