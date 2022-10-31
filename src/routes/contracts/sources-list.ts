@@ -28,16 +28,17 @@ function dirList (
   entries.forEach(ent => {
     const file = path.resolve(dirPath, ent.name)
     const url = path.posix.relative(baseDir!, file)
-    const { size } = fs.statSync(file)
     if (ent.isDirectory()) {
       const ents = dirList(path.resolve(dirPath, ent.name), baseDir, [])
       structEnts.push({
         type: 'dir',
         url,
-        size,
+        size: 0,
         ents
       })
     } else if (ent.isFile()) {
+      const { size } = fs.statSync(file)
+
       structEnts.push({
         type: 'file',
         url,
