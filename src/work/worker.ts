@@ -106,9 +106,12 @@ class WorkMan {
   successHandler () {
     const locs = this.locations
     const packDir = path.resolve(locs.processingDir, 'package')
+    const targetDir = path.resolve(packDir, 'src', 'target')
 
     this.prepareDirectory(locs.publishDir)
-    fs.rmdirSync(path.resolve(packDir, 'src', 'target'))
+    if (fs.existsSync(targetDir)) {
+      fs.rmdirSync(targetDir)
+    }
     fs.renameSync(packDir, locs.publishDir)
     this.cleanDirectory(locs.processingDir)
   }
