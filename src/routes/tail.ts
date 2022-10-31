@@ -50,9 +50,7 @@ const Tail : FastifyPluginCallback = (fastify, opts, done) => {
 
             conn.socket.send(JSON.stringify({
               type: MessageType.EOT,
-              // 0 -> OK
-              // 1 -> KO
-              data: Number(success)
+              data: success
             }))
 
             conn.socket.close(1000)
