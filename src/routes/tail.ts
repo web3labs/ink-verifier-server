@@ -7,8 +7,8 @@ import { VerifierLocations } from '../work/locations'
 import { NetworkCodeParams, NetworkCodePathSchema } from './common'
 
 enum MessageType {
-  LOG,
-  EOT
+  LOG = 'LOG',
+  EOT = 'EOT'
 }
 
 const Tail : FastifyPluginCallback = (fastify, opts, done) => {
