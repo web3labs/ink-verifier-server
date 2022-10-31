@@ -105,10 +105,11 @@ class WorkMan {
 
   successHandler () {
     const locs = this.locations
+    const packDir = path.resolve(locs.processingDir, 'package')
 
     this.prepareDirectory(locs.publishDir)
-    // TODO: remove src/target/ before rename or after?
-    fs.renameSync(path.resolve(locs.processingDir, 'package'), locs.publishDir)
+    fs.rmdirSync(path.resolve(packDir, 'src', 'target'))
+    fs.renameSync(packDir, locs.publishDir)
     this.cleanDirectory(locs.processingDir)
   }
 
