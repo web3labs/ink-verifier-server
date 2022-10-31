@@ -6,6 +6,11 @@ import { FastifyPluginCallback } from 'fastify'
 import { VerifierLocations } from '../work/locations'
 import { NetworkCodeParams, NetworkCodePathSchema } from './common'
 
+enum MessageType {
+  LOG,
+  EOT
+}
+
 const Tail : FastifyPluginCallback = (fastify, opts, done) => {
   fastify.get<{
       Params: NetworkCodeParams
@@ -18,15 +23,21 @@ const Tail : FastifyPluginCallback = (fastify, opts, done) => {
       }
     }, (conn, req) => {
       const {
-        processingDir
+        processingDir,
+        publishDir
       } = new VerifierLocations(req.params)
       const logPath = path.resolve(processingDir, 'out.log')
 
       if (fs.existsSync(logPath)) {
         const tail = spawn('tail', ['-n', '+1', '-f', logPath])
+
         tail.stdout.on('data', data => {
-          conn.socket.send(data.toString('utf-8'))
+          conn.socket.send({
+            type: MessageType.LOG,
+            data: data.toString('utf-8')
+          })
         })
+
         fs.watchFile(logPath, { interval: 1000 }, (curr) => {
           // The file is moved
           if (curr.ctimeMs === 0 &&
@@ -35,7 +46,15 @@ const Tail : FastifyPluginCallback = (fastify, opts, done) => {
             fs.unwatchFile(logPath)
             tail.kill()
 
-            conn.socket.send('⌁ END VERIFY')
+            const success = fs.existsSync(publishDir)
+
+            conn.socket.send({
+              type: MessageType.EOT,
+              // 0 -> OK
+              // 1 -> KO
+              data: Number(success)
+            })
+
             conn.socket.close(1000)
           }
         })
