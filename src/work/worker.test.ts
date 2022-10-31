@@ -82,7 +82,9 @@ describe('worker', () => {
 
     describe('successHandler', () => {
       it('should move generated package to publish/ and clean up processing/', () => {
-        existsSyncSpy.mockReturnValueOnce(false)
+        renameSyncSpy.mockClear()
+        existsSyncSpy.mockReturnValue(false)
+
         workManInstance.successHandler()
 
         expect(mkdirSyncSpy).toBeCalledWith(locs.publishDir, {
@@ -95,7 +97,12 @@ describe('worker', () => {
 
     describe('errorHandler', () => {
       it('should move logs and cid to error/ and clean up processing/', () => {
-        existsSyncSpy.mockReturnValueOnce(false)
+        renameSyncSpy.mockClear()
+        existsSyncSpy.mockReturnValue(false)
+          .mockReturnValueOnce(false)
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(true)
+
         workManInstance.errorHandler()
 
         expect(mkdirSyncSpy).toBeCalledWith(locs.errorDir, {

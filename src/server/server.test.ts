@@ -33,7 +33,7 @@ describe('server', () => {
   describe('info endpoint', () => {
     const existsSyncSpy = jest.spyOn(fs, 'existsSync')
 
-    it('should return unverified for non-existent contract', async () => {
+    it('should return unknown for non-existent contract', async () => {
       existsSyncSpy.mockReturnValue(false)
       const response = await server.inject({
         method: 'GET',
@@ -41,7 +41,7 @@ describe('server', () => {
       })
 
       expect(response).toBeDefined()
-      expect(response.json()).toEqual({ status: 'unverified' })
+      expect(response.json()).toEqual({ status: 'unknown' })
       existsSyncSpy.mockRestore()
     })
 
