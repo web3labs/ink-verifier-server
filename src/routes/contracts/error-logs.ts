@@ -7,19 +7,18 @@ import { FastifyInstance } from 'fastify'
 import HttpError from '../../errors'
 import { VerifierLocations } from '../../work/locations'
 
-export default function registerDownloadFile (fastify: FastifyInstance) {
+export default function registerErrorLogs (fastify: FastifyInstance) {
   fastify.get<{
     Params: {
-      codeHash: string,
-      '*': string
+      network: string,
+      codeHash: string
     }
-  }>('/contracts/:codeHash/src/*', {
+  }>('/contracts/:network/:codeHash/error.log', {
     schema: {
-      description: 'Fetch source files of a verified contract.',
+      description: 'Fetch error logs for a failed contract verification.',
       params: {
-        '*': {
-          type: 'string',
-          pattern: '((\\.)+)'
+        network: {
+          type: 'string'
         },
         codeHash: {
           type: 'string'
@@ -34,14 +33,14 @@ export default function registerDownloadFile (fastify: FastifyInstance) {
     }
   }, async (req, reply) => {
     const {
-      publishDir
+      errorDir
     } = new VerifierLocations({
       codeHash: req.params.codeHash,
-      network: '*'
+      network: req.params.network
     })
 
     try {
-      const stream = fs.createReadStream(path.resolve(publishDir, 'src', req.params['*']))
+      const stream = fs.createReadStream(path.resolve(errorDir, 'out.log'))
       return reply.type('application/octet-stream').send(stream)
     } catch (error) {
       throw HttpError.from(error, 400)
