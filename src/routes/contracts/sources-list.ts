@@ -46,7 +46,7 @@ async function dirList (
     const url = path.posix.relative(baseDir!, file)
     if (ent.isDirectory()) {
       const ents = await dirList(path.resolve(dirPath, ent.name), baseDir, [])
-      console.log(ents)
+
       structEnts.push({
         type: 'dir',
         name: ent.name,
