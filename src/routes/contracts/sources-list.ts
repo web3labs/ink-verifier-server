@@ -116,7 +116,6 @@ export default function registerSourcesList (fastify: FastifyInstance) {
 
     try {
       const entries = await dirList(path.resolve(publishDir, 'src'))
-
       return reply.send(entries)
     } catch (error) {
       throw HttpError.from(error, 400)
