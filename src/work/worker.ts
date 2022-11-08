@@ -116,12 +116,13 @@ class WorkMan {
       if (fs.existsSync(metadataFile)) {
         fs.renameSync(metadataFile, path.resolve(packDir, 'metadata.json'))
       }
-      fs.rmdirSync(targetDir)
+      fs.rmSync(targetDir, { recursive: true, force: true })
     }
 
     fs.renameSync(packDir, locs.publishDir)
 
     this.cleanDirectory(locs.processingDir)
+    this.cleanDirectory(locs.errorDir)
   }
 
   errorHandler () {
@@ -158,8 +159,10 @@ class WorkMan {
   }
 
   private cleanDirectory (dir: string) {
-    log.info(`Cleaning up directory ${dir}`)
-    fs.rmSync(dir, { recursive: true, force: true })
+    if (fs.existsSync(dir)) {
+      log.info(`Cleaning up directory ${dir}`)
+      fs.rmSync(dir, { recursive: true, force: true })
+    }
   }
 
   private prepareDirectory (dir: string) {
