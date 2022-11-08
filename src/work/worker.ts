@@ -109,10 +109,18 @@ class WorkMan {
     const targetDir = path.resolve(packDir, 'src', 'target')
 
     this.prepareDirectory(locs.publishDir)
+
     if (fs.existsSync(targetDir)) {
+      // Move metadata.json to package/ for convenience
+      const metadataFile = path.resolve(targetDir, 'release', 'ink', 'metadata.json')
+      if (fs.existsSync(metadataFile)) {
+        fs.renameSync(metadataFile, path.resolve(packDir, 'metadata.json'))
+      }
       fs.rmdirSync(targetDir)
     }
+
     fs.renameSync(packDir, locs.publishDir)
+
     this.cleanDirectory(locs.processingDir)
   }
 
