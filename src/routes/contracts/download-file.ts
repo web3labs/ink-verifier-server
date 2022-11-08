@@ -19,7 +19,7 @@ export default function registerDownloadFile (fastify: FastifyInstance) {
       params: {
         '*': {
           type: 'string',
-          pattern: '((\\.)+)'
+          pattern: '^(([0-9a-zA-Z_\\-. /])+)$'
         },
         codeHash: {
           type: 'string'
@@ -39,10 +39,20 @@ export default function registerDownloadFile (fastify: FastifyInstance) {
       codeHash: req.params.codeHash,
       network: '*'
     })
+    const filePath = req.params['*']
+    const safeFilePath = path.normalize(filePath).replace(/^(\.\.(\/|\\|$))+/, '')
 
     try {
-      const stream = fs.createReadStream(path.resolve(publishDir, 'src', req.params['*']))
-      return reply.type('application/octet-stream').send(stream)
+      const dst = path.join(publishDir, 'src', safeFilePath)
+      if (fs.existsSync(dst)) {
+        const stream = fs.createReadStream(dst)
+        return reply.type('application/octet-stream').send(stream)
+      } else {
+        reply.code(404).send({
+          code: '404',
+          message: 'File not found'
+        })
+      }
     } catch (error) {
       throw HttpError.from(error, 400)
     }
