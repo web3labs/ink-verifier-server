@@ -5,7 +5,7 @@ import FormData from 'form-data'
 import Multipart from '@fastify/multipart'
 
 import Server from './server'
-import WorkMan from '../work/worker'
+import WorkMan from '../verification/worker'
 import { Upload } from '../routes'
 
 jest.mock('../work/worker')

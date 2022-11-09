@@ -5,7 +5,7 @@ import path from 'node:path'
 import { FastifyInstance } from 'fastify'
 
 import HttpError from '../../errors'
-import { VerifierLocations } from '../../work/locations'
+import { VerifierLocations } from '../../verification/locations'
 
 export default function registerDownloadFile (fastify: FastifyInstance) {
   fastify.get<{

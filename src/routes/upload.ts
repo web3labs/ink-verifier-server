@@ -1,10 +1,10 @@
 import { FastifyPluginCallback } from 'fastify'
 
 import HttpError from '../errors'
-import WorkMan from '../work/worker'
+import WorkMan from '../verification/worker'
 import { NetworkCodeParams, NetworkCodePathSchema } from './common'
-import { VerificationStatus, VerifierLocations } from '../work/locations'
-import { verifyMetadata } from '../work/metadata'
+import { VerificationStatus, VerifierLocations } from '../verification/locations'
+import { verifyMetadata } from '../verification/metadata'
 
 const ALLOWED_STATUS_TO_UPLOAD_METADATA = [
   VerificationStatus.unverified,

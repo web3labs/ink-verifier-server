@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import { FastifyInstance } from 'fastify'
 
 import { BASE_DIR } from '../config'
-import workContext from '../work/context'
+import workContext from '../verification/context'
 
 function onReady (server: FastifyInstance) {
   server.log.info('Server ready')

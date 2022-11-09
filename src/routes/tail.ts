@@ -3,7 +3,7 @@ import { spawn } from 'node:child_process'
 import path from 'node:path'
 import { FastifyPluginCallback } from 'fastify'
 
-import { VerifierLocations } from '../work/locations'
+import { VerifierLocations } from '../verification/locations'
 import { NetworkCodeParams, NetworkCodePathSchema } from './common'
 
 enum MessageType {

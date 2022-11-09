@@ -4,7 +4,7 @@ import path from 'node:path'
 import { FastifyInstance } from 'fastify'
 
 import { CodeHashParams, CodeHashPathSchema } from '../common'
-import { VerifierLocations } from '../../work/locations'
+import { VerifierLocations } from '../../verification/locations'
 
 export default function registerMetadata (fastify: FastifyInstance) {
   fastify.get<{

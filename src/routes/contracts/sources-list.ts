@@ -5,7 +5,7 @@ import { FastifyInstance } from 'fastify'
 
 import HttpError from '../../errors'
 import { CodeHashParams, CodeHashPathSchema } from '../common'
-import { VerifierLocations } from '../../work/locations'
+import { VerifierLocations } from '../../verification/locations'
 import { isUtf8 } from '../../encoding/ut8'
 
 const BYTES_NUM = 256 // enough to detect if UTF8

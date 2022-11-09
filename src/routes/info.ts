@@ -2,7 +2,7 @@ import { FastifyPluginCallback } from 'fastify'
 
 import HttpError from '../errors'
 import { NetworkCodeParams, NetworkCodePathSchema } from './common'
-import { VerificationStatus, VerifierLocations } from '../work/locations'
+import { VerificationStatus, VerifierLocations } from '../verification/locations'
 
 /**
  * Endpoint to get status information on the verification process.
