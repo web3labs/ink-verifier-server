@@ -42,7 +42,7 @@ class WorkMan {
     const locs = this.locations
 
     // Contract not verified
-    if (fs.existsSync(locs.publishDir)) {
+    if (locs.isVerified) {
       throw new HttpError(`${locs.codeHashPath} is already verified.`, 400)
     }
 

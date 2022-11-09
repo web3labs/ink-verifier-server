@@ -28,10 +28,10 @@ function Server (config: FastifyServerOptions) {
 
   server.register(Multipart, {
     limits: {
-      fields: 0, // Max number of non-file fields
+      fields: 1, // Max number of non-file fields
       fileSize: 1e+7, // For multipart forms, the max file size in bytes
       files: 1, // Max number of file fields
-      headerPairs: 200 // Max number of header key=>value pairs
+      headerPairs: 50 // Max number of header key=>value pairs
     }
   })
 

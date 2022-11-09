@@ -9,7 +9,7 @@ export function transformSchema ({
   schema: FastifySchema,
   url: string
 }) {
-  if (url.startsWith('/upload')) {
+  if (url.startsWith('/verify')) {
     const {
       // we remove body from the schema
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -29,6 +29,30 @@ export function transformSchema ({
         }
       },
       required: ['package']
+    }
+    return { schema: json, url }
+  } else if (url.startsWith('/upload')) {
+    const {
+      // we remove body from the schema
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      body,
+      ...transformed
+    } = schema
+    const json = transformed as unknown as JSONObject
+    json.body = {
+      type: 'object',
+      properties: {
+        metadata: {
+          format: 'binary',
+          type: 'file',
+          description: 'The metadata.json file'
+        },
+        signature: {
+          type: 'string',
+          description: 'The xxx signature, see tutto...'
+        }
+      },
+      required: ['metadata', 'signature']
     }
     return { schema: json, url }
   } else {

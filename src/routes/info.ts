@@ -1,16 +1,8 @@
 import { FastifyPluginCallback } from 'fastify'
-import fs from 'node:fs'
+
 import HttpError from '../errors'
 import { NetworkCodeParams, NetworkCodePathSchema } from './common'
-import { VerifierLocations } from '../work/locations'
-
-enum Status {
-  'unknown' = 'unknown',
-  'verified' = 'verified',
-  'processing' = 'processing',
-  'staging' = 'staging',
-  'error' = 'error',
-}
+import { VerificationStatus, VerifierLocations } from '../work/locations'
 
 /**
  * Endpoint to get status information on the verification process.
@@ -29,7 +21,7 @@ const Info : FastifyPluginCallback = (fastify, opts, done) => {
       response: {
         200: {
           status: {
-            enum: Object.keys(Status)
+            enum: Object.keys(VerificationStatus)
           }
         },
         '4xx': {
@@ -39,29 +31,10 @@ const Info : FastifyPluginCallback = (fastify, opts, done) => {
       }
     }
   }, async (req, reply) => {
-    const {
-      publishDir,
-      processingDir,
-      stagingDir,
-      errorDir
-    } = new VerifierLocations(req.params)
-
+    const locs = new VerifierLocations(req.params)
     try {
-      let status : Status = Status.unknown
-      if (fs.existsSync(publishDir)) {
-        status = Status.verified
-      } else if (fs.existsSync(processingDir)) {
-        status = Status.processing
-      } else if (fs.existsSync(stagingDir)) {
-        status = Status.staging
-      } else if (fs.existsSync(errorDir)) {
-        status = Status.error
-      } else {
-        status = Status.unknown
-      }
-
       return reply.status(200).send({
-        status
+        status: locs.verificationStatus
       })
     } catch (error) {
       throw HttpError.from(error, 400)
