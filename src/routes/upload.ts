@@ -11,7 +11,7 @@ const ALLOWED_STATUS_TO_UPLOAD_METADATA = [
   VerificationStatus.metadata // allow overrides
 ]
 /**
- * Endpoint to handle artifact uploads for
+ * Endpoints to handle artifact uploads for
  * a network and code hash.
  *
  *
