@@ -1,6 +1,5 @@
 build/
 node_modules/
-tmp/
-publish/
+.tmp/
 .env
 coverage/
