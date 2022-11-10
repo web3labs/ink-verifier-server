@@ -45,9 +45,9 @@ export default function registerErrorLogs (fastify: FastifyInstance) {
         const stream = fs.createReadStream(logFile)
         return reply
           .type('text/plain')
-          .header('Content-Length', size)
-          .header('X-Log-SIZE', size)
-          .header('X-Log-MTIME', mtime)
+          .header('content-length', size)
+          .header('x-log-size', size)
+          .header('x-log-mtime', mtime.toISOString())
           .send(stream)
       } catch (error) {
         throw HttpError.from(error, 400)
