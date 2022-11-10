@@ -71,7 +71,7 @@ export async function verifyMetadata ({
           const sv = signatureVerify(message, signature, owner)
 
           if (sv.isValid) {
-            log.info(`Successfull verification [codeHash = ${locs.codeHash}]`)
+            log.info(`Successful verification [codeHash = ${locs.codeHash}]`)
             fs.renameSync(tmpMetaFile, path.resolve(locs.publishDir, 'metadata.json'))
             return resolve()
           } else {
