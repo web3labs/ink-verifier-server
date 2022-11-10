@@ -38,12 +38,25 @@ export default function registerErrorLogs (fastify: FastifyInstance) {
       codeHash: req.params.codeHash,
       network: req.params.network
     })
-
-    try {
-      const stream = fs.createReadStream(path.resolve(errorDir, 'out.log'))
-      return reply.type('application/octet-stream').send(stream)
-    } catch (error) {
-      throw HttpError.from(error, 400)
+    const logFile = path.resolve(errorDir, 'out.log')
+    if (fs.existsSync(logFile)) {
+      try {
+        const { size, mtime } = fs.statSync(logFile)
+        const stream = fs.createReadStream(logFile)
+        return reply
+          .type('text/plain')
+          .header('Content-Length', size)
+          .header('X-Log-SIZE', size)
+          .header('X-Log-MTIME', mtime)
+          .send(stream)
+      } catch (error) {
+        throw HttpError.from(error, 400)
+      }
+    } else {
+      return reply.code(404).send({
+        code: '404',
+        message: 'Log not found'
+      })
     }
   })
 }
