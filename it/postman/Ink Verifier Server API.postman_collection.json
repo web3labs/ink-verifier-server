@@ -6,7 +6,36 @@
 	},
 	"item": [
 		{
-			"name": "Upload Source Package",
+			"name": "Verify Source Package",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "package",
+							"type": "file",
+							"src": "/home/marc/Downloads/package.zip"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{SERVER}}/verify/shibuya/0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"verify",
+						"shibuya",
+						"0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Signed Metadata",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -153,6 +182,26 @@
 						"contracts",
 						"0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17",
 						"metadata.json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Error Log",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/contracts/shibuya/0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17/error.log",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"contracts",
+						"shibuya",
+						"0xf93cba52bf92b0caaa3880726dd917e09190cedb899726b738ba768c0bc43a17",
+						"error.log"
 					]
 				}
 			},
