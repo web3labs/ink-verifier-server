@@ -55,7 +55,7 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
     const signature : string = signatureField.value.startsWith('0x') ? signatureField.value : `0x${signatureField.value}`
 
     const locs = new VerifierLocations(req.params)
-    if (ALLOWED_STATUS_TO_UPLOAD_METADATA.indexOf(locs.verificationStatus) < 0) {
+    if (ALLOWED_STATUS_TO_UPLOAD_METADATA.indexOf(locs.verificationInfo.status) < 0) {
       throw new HttpError('The code hash cannot be updated', 400)
     }
 

@@ -20,8 +20,12 @@ const Info : FastifyPluginCallback = (fastify, opts, done) => {
       params: NetworkCodePathSchema,
       response: {
         200: {
-          status: {
-            enum: Object.keys(VerificationStatus)
+          type: 'object',
+          properties: {
+            status: {
+              enum: Object.keys(VerificationStatus)
+            },
+            timestamp: { type: 'string' }
           }
         },
         '4xx': {
@@ -33,9 +37,7 @@ const Info : FastifyPluginCallback = (fastify, opts, done) => {
   }, async (req, reply) => {
     const locs = new VerifierLocations(req.params)
     try {
-      return reply.status(200).send({
-        status: locs.verificationStatus
-      })
+      return reply.status(200).send(locs.verificationInfo)
     } catch (error) {
       throw HttpError.from(error, 400)
     }

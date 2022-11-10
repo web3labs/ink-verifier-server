@@ -13,6 +13,11 @@ export enum VerificationStatus {
   'error' = 'error',
 }
 
+export interface VerificationInfo {
+  status: VerificationStatus,
+  timestamp: Date
+}
+
 export class VerifierLocations {
   stagingDir: string
   processingDir: string
@@ -31,22 +36,38 @@ export class VerifierLocations {
     this.publishDir = path.resolve(PUBLISH_DIR, codeHash)
   }
 
-  get verificationStatus (): VerificationStatus {
-    let status : VerificationStatus
+  get verificationInfo (): VerificationInfo {
     if (this.isVerified) {
-      status = VerificationStatus.verified
+      return {
+        status: VerificationStatus.verified,
+        timestamp: fs.statSync(path.resolve(this.publishDir, 'src')).mtime
+      }
     } else if (this.hasMetadata) {
-      status = VerificationStatus.metadata
+      return {
+        status: VerificationStatus.metadata,
+        timestamp: fs.statSync(path.resolve(this.publishDir, 'metadata.json')).mtime
+      }
     } else if (fs.existsSync(this.processingDir)) {
-      status = VerificationStatus.processing
+      return {
+        status: VerificationStatus.processing,
+        timestamp: fs.statSync(this.processingDir).mtime
+      }
     } else if (fs.existsSync(this.stagingDir)) {
-      status = VerificationStatus.staging
+      return {
+        status: VerificationStatus.staging,
+        timestamp: fs.statSync(this.stagingDir).mtime
+      }
     } else if (fs.existsSync(this.errorDir)) {
-      status = VerificationStatus.error
+      return {
+        status: VerificationStatus.error,
+        timestamp: fs.statSync(this.errorDir).mtime
+      }
     } else {
-      status = VerificationStatus.unverified
+      return {
+        status: VerificationStatus.unverified,
+        timestamp: new Date()
+      }
     }
-    return status
   }
 
   get isVerified (): boolean {
