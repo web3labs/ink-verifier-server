@@ -5,24 +5,15 @@ import { FastifyInstance } from 'fastify'
 
 import HttpError from '../../errors'
 import { VerifierLocations } from '../../verification/locations'
+import { NetworkCodeParams, NetworkCodePathSchema } from '../common'
 
 export default function registerErrorLogs (fastify: FastifyInstance) {
   fastify.get<{
-    Params: {
-      network: string,
-      codeHash: string
-    }
+    Params: NetworkCodeParams
   }>('/contracts/:network/:codeHash/error.log', {
     schema: {
       description: 'Fetch error logs for a failed contract verification.',
-      params: {
-        network: {
-          type: 'string'
-        },
-        codeHash: {
-          type: 'string'
-        }
-      },
+      params: NetworkCodePathSchema,
       response: {
         '4xx': {
           code: { type: 'string' },
@@ -33,11 +24,10 @@ export default function registerErrorLogs (fastify: FastifyInstance) {
   }, async (req, reply) => {
     const {
       errorDir
-    } = new VerifierLocations({
-      codeHash: req.params.codeHash,
-      network: req.params.network
-    })
+    } = new VerifierLocations(req.params)
+
     const logFile = path.resolve(errorDir, 'out.log')
+
     if (fs.existsSync(logFile)) {
       try {
         const { size } = fs.statSync(logFile)
