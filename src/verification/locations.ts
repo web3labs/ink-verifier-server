@@ -15,7 +15,7 @@ export enum VerificationStatus {
 
 export interface VerificationInfo {
   status: VerificationStatus,
-  timestamp: Date
+  timestamp: string
 }
 
 export class VerifierLocations {
@@ -40,32 +40,32 @@ export class VerifierLocations {
     if (this.isVerified) {
       return {
         status: VerificationStatus.verified,
-        timestamp: fs.statSync(path.resolve(this.publishDir, 'src')).mtime
+        timestamp: fs.statSync(path.resolve(this.publishDir, 'src')).mtime.toISOString()
       }
     } else if (this.hasMetadata) {
       return {
         status: VerificationStatus.metadata,
-        timestamp: fs.statSync(path.resolve(this.publishDir, 'metadata.json')).mtime
+        timestamp: fs.statSync(path.resolve(this.publishDir, 'metadata.json')).mtime.toISOString()
       }
     } else if (fs.existsSync(this.processingDir)) {
       return {
         status: VerificationStatus.processing,
-        timestamp: fs.statSync(this.processingDir).mtime
+        timestamp: fs.statSync(this.processingDir).mtime.toISOString()
       }
     } else if (fs.existsSync(this.stagingDir)) {
       return {
         status: VerificationStatus.staging,
-        timestamp: fs.statSync(this.stagingDir).mtime
+        timestamp: fs.statSync(this.stagingDir).mtime.toISOString()
       }
     } else if (fs.existsSync(this.errorDir)) {
       return {
         status: VerificationStatus.error,
-        timestamp: fs.statSync(this.errorDir).mtime
+        timestamp: fs.statSync(this.errorDir).mtime.toISOString()
       }
     } else {
       return {
         status: VerificationStatus.unverified,
-        timestamp: new Date()
+        timestamp: ''
       }
     }
   }
