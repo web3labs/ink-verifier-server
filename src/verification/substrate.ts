@@ -65,7 +65,6 @@ function resolveEndpoint (network: string) : string {
     !isDisabled &&
     !isUnreachable &&
     value &&
-    !value.includes('127.0.0.1') &&
     !value.startsWith('light://') &&
     info === network
   )
