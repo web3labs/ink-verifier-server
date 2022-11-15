@@ -72,6 +72,13 @@ export async function verifyMetadata ({
 
           if (sv.isValid) {
             log.info(`Successful verification [codeHash = ${locs.codeHash}]`)
+
+            if (!fs.existsSync(locs.publishDir)) {
+              fs.mkdirSync(locs.publishDir, {
+                recursive: true
+              })
+            }
+
             fs.renameSync(tmpMetaFile, path.resolve(locs.publishDir, 'metadata.json'))
             return resolve()
           } else {
