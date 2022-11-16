@@ -5,6 +5,7 @@ import { FastifyPluginCallback } from 'fastify'
 
 import { VerifierLocations } from '../verification/locations'
 import { NetworkCodeParams, NetworkCodePathSchema } from './common'
+import log from '../log'
 
 enum MessageType {
   LOG = 'LOG',
@@ -31,6 +32,8 @@ const Tail : FastifyPluginCallback = (fastify, opts, done) => {
       if (fs.existsSync(logPath)) {
         const tail = spawn('tail', ['-n', '+1', '-f', logPath])
 
+        log.info(`[Tail] Start ${logPath} (${tail.pid})`)
+
         tail.stdout.on('data', data => {
           conn.socket.send(JSON.stringify({
             type: MessageType.LOG,
@@ -56,7 +59,9 @@ const Tail : FastifyPluginCallback = (fastify, opts, done) => {
             conn.socket.close(1000)
           }
         })
-        conn.on('close', () => {
+        conn.socket.on('close', () => {
+          log.info(`[Tail] End ${logPath} (${tail.pid})`)
+
           fs.unwatchFile(logPath)
           tail.kill()
         })
