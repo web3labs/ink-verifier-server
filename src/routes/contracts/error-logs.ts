@@ -30,11 +30,14 @@ export default function registerErrorLogs (fastify: FastifyInstance) {
 
     if (fs.existsSync(logFile)) {
       try {
-        const { size } = fs.statSync(logFile)
+        const { size, mtime } = fs.statSync(logFile)
         const stream = fs.createReadStream(logFile)
+        const ts = Math.floor(mtime.getTime() / 1000)
+        const filename = `error-${ts}_${req.params.network}_${req.params.codeHash}.log`
         return reply
           .type('text/plain')
           .header('content-length', size)
+          .header('content-disposition', `attachment; filename="${filename}"`)
           .send(stream)
       } catch (error) {
         throw HttpError.from(error, 400)
