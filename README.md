@@ -71,7 +71,7 @@ This section describes the source code verification process based on ink! reprod
 
 The service supports uploading signed contract metadata as an unverified alternative to reproducible builds generated metadata.
 
-This feature responds to (1) the support for `build_info` data is only available from `cargo-contract 2.0.0.alpha.3`,
+This feature responds to (1) the support for `build_info` data is only available from `cargo-contract 2.0.0-alpha.4`,
 (2) there is no official image or procedure regarding reproducible builds yet, (3) we want to expand the service utility in the meantime.
 
 Although it is a far from ideal way to bind the metadata to a given code hash it prevents trivial explotation by:
