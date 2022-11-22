@@ -32,6 +32,58 @@ The configuration uses the environment variables described in the table below.
 
 The server has support for `.env` files.
 
+## Running locally
+
+After installing the project dependencies, only for the first time, using
+
+```bash
+npm i
+```
+
+you can start a development server
+
+```bash
+npm run start:dev
+```
+
+## Testing
+
+To run the unit tests, use the command
+
+```bash
+npm test
+```
+
+To generate a test coverage report, execute
+
+```bash
+npm run test:coverage
+```
+
+## Linting
+
+To apply the code linter and automatically fix issues
+
+```bash
+npm run lint
+```
+
+## Running in Production
+
+The Ink Verification Service is meant to be run as a standalone OS process since it spawn container processes for
+the reproducible builds and we want to avoid the nuances of Docker in Docker or alternative solutions.
+
+We recommend the usage of [PM2](https://pm2.keymetrics.io/) process manager, an `ecosystem.config.js` is provided for this purpose.
+
+Example:
+
+```bash
+pm2 start ecosystem.config.js --env production
+```
+
+See [PM2 documentation](https://pm2.keymetrics.io/docs/usage/quick-start/).
+
+
 ## Verification Pipeline
 
 This section describes the source code verification process based on ink! reproducible builds.
