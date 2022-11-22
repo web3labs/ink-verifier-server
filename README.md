@@ -32,7 +32,7 @@ The configuration uses the environment variables described in the table below.
 
 The server has support for `.env` files.
 
-## Running locally
+## Running Locally
 
 After installing the project dependencies, only for the first time, using
 
@@ -84,7 +84,7 @@ pm2 start ecosystem.config.js --env production
 See [PM2 documentation](https://pm2.keymetrics.io/docs/usage/quick-start/).
 
 
-## Verification Pipeline
+## Reproducible Builds Verification Pipeline
 
 This section describes the source code verification process based on ink! reproducible builds.
 
@@ -121,7 +121,10 @@ This section describes the source code verification process based on ink! reprod
 
 ## Unverified Metadata Upload
 
-The service supports uploading signed contract metadata as an unverified alternative to reproducible builds generated metadata.
+> For verified source code and metadata use the [Reproducible Builds Verification](#reproducible-builds-verification-pipeline) mechanism.
+
+The service supports uploading **signed contract metadata as an additional alternative to reproducible builds generated metadata**.
+Please note that the signed metadata is not verified and the owner of the code hash is trusted.
 
 This feature responds to (1) the support for `build_info` data is only available from `cargo-contract 2.0.0-alpha.4`,
 (2) there is no official image or procedure regarding reproducible builds yet, (3) we want to expand the service utility in the meantime.
