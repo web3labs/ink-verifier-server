@@ -70,8 +70,8 @@ npm run lint
 
 ## Running in Production
 
-The Ink Verification Service is meant to be run as a standalone OS process since it spawn container processes for
-the reproducible builds and we want to avoid the nuances of Docker in Docker or alternative solutions.
+The Ink Verification Server is meant to be run as a standalone OS process since it spawn container processes for
+the reproducible builds and we want to avoid the nuances of Docker in Docker or similar solutions.
 
 We recommend the usage of [PM2](https://pm2.keymetrics.io/) process manager, an `ecosystem.config.js` is provided for this purpose.
 
