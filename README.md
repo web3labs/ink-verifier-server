@@ -84,7 +84,7 @@ pm2 start ecosystem.config.js --env production
 See [PM2 documentation](https://pm2.keymetrics.io/docs/usage/quick-start/).
 
 
-## Reproducible Builds Verification Pipeline
+## Reproducible Builds Verification
 
 This section describes the source code verification process based on ink! reproducible builds.
 
@@ -121,7 +121,7 @@ This section describes the source code verification process based on ink! reprod
 
 ## Unverified Metadata Upload
 
-> For verified source code and metadata use the [Reproducible Builds Verification](#reproducible-builds-verification-pipeline) mechanism.
+> For verified source code and metadata use the [Reproducible Builds Verification](#reproducible-builds-verification) mechanism.
 
 The service supports uploading **signed contract metadata as an additional alternative to reproducible builds generated metadata**.
 Please note that the signed metadata is not verified and the owner of the code hash is trusted.
@@ -131,7 +131,7 @@ This feature responds to (1) the support for `build_info` data is only available
 
 Although it is a far from ideal way to bind the metadata to a given code hash it prevents trivial explotation by:
 - Verifying that the signature is from the owner account of the code hash.
-- Verifying that the signed message matches the sha256 of the uploaded `metadata.json` + the code hash of the uploaded contract bytecode.
+- Verifying that the signed message matches the sha256 of the uploaded `metadata.json` + the `code hash` of the uploaded contract bytecode.
 
 ## Technical Notes
 
