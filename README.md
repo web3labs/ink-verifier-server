@@ -11,7 +11,9 @@ Features:
 - Signed upload of contract metadata
 - Access to the verified artifacts
 
-Please, check [verifier container image](https://github.com/web3labs/ink-verifier-image) for information on how to generate the verifiable source code packages.
+For a high-level explanation of the Ink! Verifier Server and how it integrates with the [Explorer UI](https://github.com/web3labs/epirus-substrate/tree/main/explorer-ui) and [Ink! Verifier Image](https://github.com/web3labs/ink-verifier-image), please check out the [Ink! Verifier Explainer](./docs/INK_VERIFIER_EXPLAINER.md)
+
+For instructions on how to generate a verifiable source code package, please check out the [Ink! Verifier Image documentation](https://github.com/web3labs/ink-verifier-image/blob/main/README.md#package-generation)
 
 ## Configuration
 
@@ -116,7 +118,7 @@ This section describes the source code verification process based on ink! reprod
 > **Processing** in the processing directory
 
 5. The server moves the staging files to the processing directory
-6. The server runs a container process for the verifier image to verify the package in processing. See [verifier image](https://github.com/web3labs/ink-verifier) for details
+6. The server runs a container process for the verifier image to verify the package in processing. See [source code verification workflow](./docs/INK_VERIFIER_EXPLAINER.md#source-code-verification-workflow) for details
 7. On the event of container exit the server moves the verified artificats to the publish directory if the verification was successful, otherwise keeps a log in the errors directory
 
 ## Unverified Metadata Upload
