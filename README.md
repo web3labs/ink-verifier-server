@@ -1,4 +1,4 @@
-# Verifier Server for Ink!
+# 🦑 Verifier Server for Ink!
 
 Server for Ink! source code verification.
 
