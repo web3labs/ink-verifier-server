@@ -8,7 +8,7 @@ describe('open api', () => {
           body: { remove: 'me' },
           operationId: '100'
         },
-        url: '/upload/network/code-hash'
+        url: '/verify/network/code-hash'
       })
       expect(transformed).toBeDefined()
       expect(transformed.schema).not.toHaveProperty('body.remove')

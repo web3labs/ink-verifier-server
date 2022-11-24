@@ -7,5 +7,8 @@ module.exports = {
     '<rootDir>/src/start.ts',
     '<rootDir>/src/server/ready.ts',
     '<rootDir>/src/routes/tail.ts'
+  ],
+  modulePathIgnorePatterns: [
+    '<rootDir>/\\.tmp/.*'
   ]
 }

@@ -1,4 +1,4 @@
-import fs from 'node:fs'
+import fs, { PathLike } from 'node:fs'
 import WorkMan, { resolveTypeInfo } from './worker'
 import { VerifierLocations } from './locations'
 import path from 'node:path'
@@ -83,7 +83,9 @@ describe('worker', () => {
     describe('successHandler', () => {
       it('should move generated package to publish/ and clean up processing/', () => {
         renameSyncSpy.mockClear()
-        existsSyncSpy.mockReturnValue(false)
+        existsSyncSpy.mockImplementation((path: PathLike) => {
+          return locs.processingDir === path
+        })
 
         workManInstance.successHandler()
 
@@ -100,6 +102,7 @@ describe('worker', () => {
         renameSyncSpy.mockClear()
         existsSyncSpy.mockReturnValue(false)
           .mockReturnValueOnce(false)
+          .mockReturnValueOnce(true)
           .mockReturnValueOnce(true)
           .mockReturnValueOnce(true)
 

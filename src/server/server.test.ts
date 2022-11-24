@@ -1,5 +1,5 @@
 import Fastify, { FastifyInstance } from 'fastify'
-import fs from 'node:fs'
+import fs, { Stats } from 'node:fs'
 import path from 'path'
 import FormData from 'form-data'
 import Multipart from '@fastify/multipart'
@@ -8,7 +8,10 @@ import Server from './server'
 import WorkMan from '../verification/worker'
 import { Upload } from '../routes'
 
-jest.mock('../work/worker')
+import '@polkadot/util/cjs/versionDetect'
+jest.mock('@polkadot/util/cjs/versionDetect')
+
+jest.mock('../verification/worker')
 
 jest.mock('node:fs', () => (
   {
@@ -32,8 +35,10 @@ describe('server', () => {
 
   describe('info endpoint', () => {
     const existsSyncSpy = jest.spyOn(fs, 'existsSync')
+    const statSyncSpy = jest.spyOn(fs, 'statSync')
 
     it('should return unknown for non-existent contract', async () => {
+      existsSyncSpy.mockClear()
       existsSyncSpy.mockReturnValue(false)
       const response = await server.inject({
         method: 'GET',
@@ -41,12 +46,26 @@ describe('server', () => {
       })
 
       expect(response).toBeDefined()
-      expect(response.json()).toEqual({ status: 'unknown' })
+      expect(response.json()).toEqual({
+        status: 'unverified',
+        timestamp: ''
+      })
       existsSyncSpy.mockRestore()
     })
 
     it('should return verified status for verified contract', async () => {
+      existsSyncSpy.mockClear()
       existsSyncSpy.mockReturnValueOnce(true)
+
+      const now = new Date()
+      statSyncSpy.mockClear()
+      statSyncSpy.mockReturnValue(Object.assign(
+        new Stats(),
+        {
+          mtime: now
+        }
+      ))
+
       const response = await server.inject({
         method: 'GET',
         url: '/info/rococoContracts/0x'
@@ -54,7 +73,10 @@ describe('server', () => {
 
       expect(response).toBeDefined()
       expect(response.statusCode).toBe(200)
-      expect(response.json()).toEqual({ status: 'verified' })
+      expect(response.json()).toEqual({
+        status: 'verified',
+        timestamp: now.toISOString()
+      })
     })
   })
 
@@ -69,7 +91,7 @@ describe('server', () => {
     it('should return error if no file is uploaded', async () => {
       const response = await server.inject({
         method: 'POST',
-        url: '/upload/rococoContracts/0x'
+        url: '/verify/rococoContracts/0x'
       })
 
       expect(response).toBeDefined()
@@ -87,7 +109,7 @@ describe('server', () => {
       ))
       const response = await server.inject({
         method: 'POST',
-        url: '/upload/rococoContracts/0x',
+        url: '/verify/rococoContracts/0x',
         payload: form,
         headers: form.getHeaders()
       })
@@ -106,7 +128,7 @@ describe('server', () => {
       ))
       const response = await server.inject({
         method: 'POST',
-        url: '/upload/rococoContracts/0x',
+        url: '/verify/rococoContracts/0x',
         payload: form,
         headers: form.getHeaders()
       })
@@ -140,7 +162,7 @@ describe('server', () => {
       ))
       const response = await fastify.inject({
         method: 'POST',
-        url: '/upload/rococoContracts/0x',
+        url: '/verify/rococoContracts/0x',
         payload: form,
         headers: form.getHeaders()
       })
