@@ -1,6 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+import sanitize from 'sanitize-filename'
+
 import { BASE_DIR, PUBLISH_DIR } from '../config'
 import { NetworkCodeParams } from '../routes/common'
 
@@ -27,13 +29,14 @@ export class VerifierLocations {
   codeHash: string
 
   constructor ({ network, codeHash }: NetworkCodeParams) {
-    this.network = network
-    this.codeHash = codeHash
-    this.stagingDir = path.resolve(BASE_DIR, 'staging', network, codeHash)
-    this.processingDir = path.resolve(BASE_DIR, 'processing', network, codeHash)
-    this.errorDir = path.resolve(BASE_DIR, 'error', network, codeHash)
+    this.network = sanitize(network)
+    this.codeHash = sanitize(codeHash)
+
+    this.stagingDir = path.resolve(BASE_DIR, 'staging', this.network, this.codeHash)
+    this.processingDir = path.resolve(BASE_DIR, 'processing', this.network, this.codeHash)
+    this.errorDir = path.resolve(BASE_DIR, 'error', this.network, this.codeHash)
     // Code hash is content addressable, so it works for any
-    this.publishDir = path.resolve(PUBLISH_DIR, codeHash)
+    this.publishDir = path.resolve(PUBLISH_DIR, this.codeHash)
   }
 
   get verificationInfo (): VerificationInfo {
