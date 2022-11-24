@@ -11,7 +11,7 @@ Features:
 - Signed upload of contract metadata
 - Access to the verified artifacts
 
-Please, check [verifier container image](https://github.com/web3labs/ink-verifier) for information on how to generate the verifiable source code packages.
+Please, check [verifier container image](https://github.com/web3labs/ink-verifier-image) for information on how to generate the verifiable source code packages.
 
 ## Configuration
 
