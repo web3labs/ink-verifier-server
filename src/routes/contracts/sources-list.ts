@@ -81,24 +81,8 @@ export default function registerSourcesList (fastify: FastifyInstance) {
       params: CodeHashPathSchema,
       response: {
         200: {
-          definitions: {
-            dirEntry: {
-              type: 'object',
-              properties: {
-                type: { type: 'string' },
-                name: { type: 'string' },
-                url: { type: 'string' },
-                size: { type: 'number' },
-                utf8: { type: 'boolean' },
-                ents: {
-                  type: 'array',
-                  items: { $ref: '#/definitions/dirEntry' }
-                }
-              }
-            }
-          },
           type: 'array',
-          items: { $ref: '#/definitions/dirEntry' }
+          items: { $ref: 'dirEntry#' }
         },
         '4xx': {
           code: { type: 'string' },

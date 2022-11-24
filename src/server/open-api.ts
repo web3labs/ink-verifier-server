@@ -76,6 +76,22 @@ export default function registerOpenApi (server: FastifyInstance) {
     transform: transformSchema
   })
 
+  server.addSchema({
+    $id: 'dirEntry',
+    type: 'object',
+    properties: {
+      type: { type: 'string' },
+      name: { type: 'string' },
+      url: { type: 'string' },
+      size: { type: 'number' },
+      utf8: { type: 'boolean' },
+      ents: {
+        type: 'array',
+        items: { $ref: 'dirEntry#' }
+      }
+    }
+  })
+
   server.get('/oas.json', {
     schema: { hide: true },
     handler: function (req, reply) {
