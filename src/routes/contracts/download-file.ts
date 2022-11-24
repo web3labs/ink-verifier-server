@@ -11,9 +11,9 @@ export default function registerDownloadFile (fastify: FastifyInstance) {
   fastify.get<{
     Params: {
       codeHash: string,
-      '*': string
+      wildcard: string
     }
-  }>('/contracts/:codeHash/src/*', {
+  }>('/contracts/:codeHash/src/:wildcard', {
     config: {
       rateLimit: {
         max: 60,
@@ -23,7 +23,7 @@ export default function registerDownloadFile (fastify: FastifyInstance) {
     schema: {
       description: 'Fetch source files of a verified contract.',
       params: {
-        '*': {
+        wildcard: {
           type: 'string',
           pattern: '^(([0-9a-zA-Z_\\-. /])+)$'
         },
@@ -45,7 +45,7 @@ export default function registerDownloadFile (fastify: FastifyInstance) {
       codeHash: req.params.codeHash,
       network: '*'
     })
-    const filePath = req.params['*']
+    const filePath = req.params.wildcard
     const safeFilePath = path.normalize(filePath).replace(/^(\.\.(\/|\\|$))+/, '')
 
     try {
