@@ -7,7 +7,6 @@ import crypto from 'node:crypto'
 
 import { signatureVerify } from '@polkadot/util-crypto'
 import { MultipartFile } from '@fastify/multipart'
-import sanitize from 'sanitize-filename'
 
 import { VerifierLocations } from './locations'
 import { ownerInfoOf } from './substrate'
@@ -38,8 +37,7 @@ export async function verifyMetadata ({
     signature: string,
     locs: VerifierLocations
 }) {
-  const tmpDirName = sanitize(`meta-${locs.network}-${locs.codeHash}`)
-  let tmpDir = path.join(os.tmpdir(), tmpDirName)
+  let tmpDir = path.join(os.tmpdir(), `meta-${locs.network}-${locs.codeHash}`)
   const { file } = data
 
   try {
