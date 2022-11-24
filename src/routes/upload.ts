@@ -26,6 +26,12 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
   fastify.post<{
     Params: NetworkCodeParams
   }>('/upload/:network/:codeHash', {
+    config: {
+      rateLimit: {
+        max: 3,
+        timeWindow: '1 minute'
+      }
+    },
     schema: {
       description: 'Uploads signed metadata file for a code hash',
       consumes: ['multipart/form-data'],
@@ -84,6 +90,12 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
   fastify.post<{
     Params: NetworkCodeParams
   }>('/verify/:network/:codeHash', {
+    config: {
+      rateLimit: {
+        max: 3,
+        timeWindow: '1 minute'
+      }
+    },
     schema: {
       description: 'Verifies a source code package',
       consumes: ['multipart/form-data'],

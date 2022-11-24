@@ -11,6 +11,12 @@ export default function registerErrorLogs (fastify: FastifyInstance) {
   fastify.get<{
     Params: NetworkCodeParams
   }>('/contracts/:network/:codeHash/error.log', {
+    config: {
+      rateLimit: {
+        max: 3,
+        timeWindow: '1 minute'
+      }
+    },
     schema: {
       description: 'Fetch error logs for a failed contract verification.',
       params: NetworkCodePathSchema,

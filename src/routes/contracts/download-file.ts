@@ -14,6 +14,12 @@ export default function registerDownloadFile (fastify: FastifyInstance) {
       '*': string
     }
   }>('/contracts/:codeHash/src/*', {
+    config: {
+      rateLimit: {
+        max: 30,
+        timeWindow: '1 minute'
+      }
+    },
     schema: {
       description: 'Fetch source files of a verified contract.',
       params: {

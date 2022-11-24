@@ -16,6 +16,7 @@
   "dependencies": {
     "@fastify/cors": "^8.2.0",
     "@fastify/multipart": "^7.3.0",
+    "@fastify/rate-limit": "^7.5.0",
     "@fastify/swagger": "^8.1.0",
     "@fastify/under-pressure": "^8.1.0",
     "@fastify/websocket": "^7.1.1",

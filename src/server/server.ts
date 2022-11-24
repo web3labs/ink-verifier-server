@@ -3,12 +3,17 @@ import UnderPressure from '@fastify/under-pressure'
 import Multipart from '@fastify/multipart'
 import WebSocket from '@fastify/websocket'
 import CORS from '@fastify/cors'
+import RateLimit from '@fastify/rate-limit'
 
 import { Upload, Info, Tail, Contracts } from '../routes'
 import registerOpenApi from './open-api'
 
 function Server (config: FastifyServerOptions) {
   const server = Fastify(config)
+
+  server.register(RateLimit, {
+    global: false
+  })
 
   server.register(CORS, {
     origin: true // Allow any origin
