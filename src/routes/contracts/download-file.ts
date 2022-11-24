@@ -16,7 +16,7 @@ export default function registerDownloadFile (fastify: FastifyInstance) {
   }>('/contracts/:codeHash/src/*', {
     config: {
       rateLimit: {
-        max: 30,
+        max: 60,
         timeWindow: '1 minute'
       }
     },
