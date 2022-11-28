@@ -16,6 +16,10 @@ async function Server (config: FastifyServerOptions & {
 }) {
   const server = await Fastify(config)
 
+  await server.register(CORS, {
+    origin: true // Allow any origin
+  })
+
   if (config.services.rateLimit) {
     await server.register(RateLimit, {
       global: false
@@ -43,10 +47,6 @@ async function Server (config: FastifyServerOptions & {
       files: 1, // Max number of file fields
       headerPairs: 50 // Max number of header key=>value pairs
     }
-  })
-
-  await server.register(CORS, {
-    origin: true // Allow any origin
   })
 
   await registerOpenApi(server)
