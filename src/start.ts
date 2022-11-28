@@ -3,7 +3,7 @@ import log from './log'
 import onReady from './server/ready'
 import Server from './server/server'
 
-const server = Server({
+const server = await Server({
   logger: log
 })
 

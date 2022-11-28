@@ -60,8 +60,8 @@ export function transformSchema ({
   }
 }
 
-export default function registerOpenApi (server: FastifyInstance) {
-  server.register(Swagger, {
+export default async function registerOpenApi (server: FastifyInstance) {
+  await server.register(Swagger, {
     openapi: {
       info: {
         title: 'Ink Verification Service API',
@@ -76,7 +76,7 @@ export default function registerOpenApi (server: FastifyInstance) {
     transform: transformSchema
   })
 
-  server.addSchema({
+  await server.addSchema({
     $id: 'dirEntry',
     type: 'object',
     properties: {

@@ -25,7 +25,7 @@ describe('server', () => {
 
   beforeAll(async () => {
     // run the server instance we are testing against
-    server = Server({})
+    server = await Server({})
     await server.listen({ port: 0 })
   })
 
