@@ -8,12 +8,19 @@ import RateLimit from '@fastify/rate-limit'
 import { Upload, Info, Tail, Contracts } from '../routes'
 import registerOpenApi from './open-api'
 
-async function Server (config: FastifyServerOptions) {
+async function Server (config: FastifyServerOptions & {
+  services: {
+    underPressure: boolean,
+    rateLimit: boolean
+  }
+}) {
   const server = await Fastify(config)
 
-  await server.register(RateLimit, {
-    global: false
-  })
+  if (config.services.rateLimit) {
+    await server.register(RateLimit, {
+      global: false
+    })
+  }
 
   await server.register(WebSocket, {
     options: {
@@ -21,11 +28,13 @@ async function Server (config: FastifyServerOptions) {
     }
   })
 
-  await server.register(UnderPressure, {
-    maxEventLoopDelay: 1000,
-    retryAfter: 50,
-    exposeStatusRoute: true
-  })
+  if (config.services.underPressure) {
+    await server.register(UnderPressure, {
+      maxEventLoopDelay: 1000,
+      retryAfter: 50,
+      exposeStatusRoute: true
+    })
+  }
 
   await server.register(Multipart, {
     limits: {

@@ -4,7 +4,11 @@ import onReady from './server/ready'
 import Server from './server/server'
 
 const server = await Server({
-  logger: log
+  logger: log,
+  services: {
+    underPressure: true,
+    rateLimit: true
+  }
 })
 
 server.ready(err => {
