@@ -5,6 +5,7 @@ module.exports = {
     env_production: {
       NODE_ENV: 'production',
       SERVER_HOST: '0.0.0.0',
+      TMP_DIR: '/opt/verifier/tmp',
       BASE_DIR: '/opt/verifier/data',
       CACHES_DIR: '/opt/verifier/.caches',
       PUBLISH_DIR: '/opt/verifier/publish',

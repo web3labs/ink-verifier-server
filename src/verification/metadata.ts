@@ -1,7 +1,6 @@
 
 import { mkdtemp } from 'node:fs/promises'
 import path from 'node:path'
-import os from 'node:os'
 import fs from 'node:fs'
 import crypto from 'node:crypto'
 
@@ -11,6 +10,7 @@ import { MultipartFile } from '@fastify/multipart'
 import { VerifierLocations } from './locations'
 import { ownerInfoOf } from './substrate'
 import log from '../log'
+import { TMP_DIR } from '../config'
 
 /**
  * Verifies the owner signature for a code hash
@@ -37,7 +37,7 @@ export async function verifyMetadata ({
     signature: string,
     locs: VerifierLocations
 }) {
-  let tmpDir = path.join(os.tmpdir(), `meta-${locs.network}-${locs.codeHash}`)
+  let tmpDir = path.join(TMP_DIR, `meta-${locs.network}-${locs.codeHash}`)
   const { file } = data
 
   try {
