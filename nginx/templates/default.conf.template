@@ -11,10 +11,10 @@ server {
   listen ${NGINX_PORT};
   server_name ${NGINX_HOST};
 
-  add_header 'Access-Control-Allow-Origin' "$http_origin";
+  add_header 'Access-Control-Allow-Origin' "$http_origin" always;
   add_header 'Access-Control-Allow-Credentials' 'true';
   add_header 'Access-Control-Allow-Headers' 'Authorization,Accept,Origin,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
-  add_header 'Access-Control-Allow-Methods' 'GET,POST,OPTIONS';
+  add_header 'Access-Control-Allow-Methods' 'GET,POST,OPTIONS' always;
 
   # Handle pre-flight requests
   if ($request_method = OPTIONS) {
