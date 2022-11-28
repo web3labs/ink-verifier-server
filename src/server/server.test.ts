@@ -28,7 +28,8 @@ describe('server', () => {
     server = await Server({
       services: {
         underPressure: false,
-        rateLimit: false
+        rateLimit: false,
+        cors: false
       }
     })
     await server.listen({ port: 0 })

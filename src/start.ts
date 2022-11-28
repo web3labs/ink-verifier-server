@@ -8,7 +8,8 @@ async function main () {
     logger: log,
     services: {
       underPressure: true,
-      rateLimit: true
+      rateLimit: true,
+      cors: false
     }
   })
 

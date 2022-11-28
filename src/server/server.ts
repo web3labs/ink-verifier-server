@@ -11,14 +11,17 @@ import registerOpenApi from './open-api'
 async function Server (config: FastifyServerOptions & {
   services: {
     underPressure: boolean,
-    rateLimit: boolean
+    rateLimit: boolean,
+    cors: boolean
   }
 }) {
   const server = await Fastify(config)
 
-  await server.register(CORS, {
-    origin: true // Allow any origin
-  })
+  if (config.services.cors) {
+    await server.register(CORS, {
+      origin: true // Allow any origin
+    })
+  }
 
   if (config.services.rateLimit) {
     await server.register(RateLimit, {
