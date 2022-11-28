@@ -7,6 +7,7 @@ import { VerificationStatus, VerifierLocations } from '../verification/locations
 import { verifyMetadata } from '../verification/metadata'
 
 const ALLOWED_STATUS_TO_UPLOAD_METADATA = [
+  VerificationStatus.error,
   VerificationStatus.unverified,
   VerificationStatus.metadata // allow overrides
 ]
@@ -61,8 +62,10 @@ const Upload : FastifyPluginCallback = (fastify, opts, done) => {
     const signature : string = signatureField.value.startsWith('0x') ? signatureField.value : `0x${signatureField.value}`
 
     const locs = new VerifierLocations(req.params)
+    // Check if metadata can be updated for code hash
+    // Only allow for status of 'unverified', 'error', and 'metadata'
     if (ALLOWED_STATUS_TO_UPLOAD_METADATA.indexOf(locs.verificationInfo.status) < 0) {
-      throw new HttpError('The code hash cannot be updated', 400)
+      throw new HttpError(`The code hash cannot be updated because it has status ${locs.verificationInfo.status}`, 400)
     }
 
     try {
