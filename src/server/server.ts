@@ -11,12 +11,12 @@ import registerOpenApi from './open-api'
 function Server (config: FastifyServerOptions) {
   const server = Fastify(config)
 
-  server.register(RateLimit, {
-    global: false
-  })
-
   server.register(CORS, {
     origin: true // Allow any origin
+  })
+
+  server.register(RateLimit, {
+    global: false
   })
 
   server.register(WebSocket, {
