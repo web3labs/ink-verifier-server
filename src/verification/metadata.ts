@@ -41,13 +41,13 @@ export async function verifyMetadata ({
   const { file } = data
 
   try {
-    // NOTE: this can lead to race conditions
     if (!fs.existsSync(TMP_DIR)) {
       fs.mkdirSync(TMP_DIR, {
         recursive: true
       })
     }
 
+    // NOTE: this can lead to race conditions
     tmpDir = await mkdtemp(tmpDir)
     const tmpMetaFile = path.join(tmpDir, 'metadata.json')
     const tmpStream = fs.createWriteStream(tmpMetaFile)
