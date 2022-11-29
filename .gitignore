@@ -2,4 +2,5 @@ build/
 node_modules/
 .tmp/
 .env
+.vscode
 coverage/
