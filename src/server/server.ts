@@ -17,12 +17,14 @@ async function Server (config: FastifyServerOptions & {
 }) {
   const server = await Fastify(config)
 
+  /* istanbul ignore next */
   if (config.services.cors) {
     await server.register(CORS, {
       origin: true // Allow any origin
     })
   }
 
+  /* istanbul ignore next */
   if (config.services.rateLimit) {
     await server.register(RateLimit, {
       global: false
@@ -35,6 +37,7 @@ async function Server (config: FastifyServerOptions & {
     }
   })
 
+  /* istanbul ignore next */
   if (config.services.underPressure) {
     await server.register(UnderPressure, {
       maxEventLoopDelay: 1000,
