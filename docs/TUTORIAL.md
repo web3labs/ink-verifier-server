@@ -187,7 +187,7 @@ Go to the explorer-ui. It should be running on http://127.0.0.1:3000/ and you sh
 
 ![homepage](https://drive.google.com/uc?id=1yG6bLlOQiywm9svg9-dtB8gY_PdLmExT)
 
-Navigate to the code hash page through the link on the homepage (indicated by yellow arrow in the above image).Alternatively, use the search box find the code hash. Inside the code hash page, open the Source Code tab.
+Navigate to the code hash page through the link on the homepage (indicated by yellow arrow in the above image). Alternatively, use the search box to find the code hash. Inside the code hash page, open the Source Code tab.
 
 ![source code tab](https://drive.google.com/uc?id=1vv1ZFAlO-5fByWJ4snzhtEKrRwR_LdBC)
 
