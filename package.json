@@ -17,6 +17,7 @@
     "@fastify/cors": "^8.2.0",
     "@fastify/multipart": "^7.3.0",
     "@fastify/rate-limit": "^7.5.0",
+    "@fastify/static": "^6.5.1",
     "@fastify/swagger": "^8.1.0",
     "@fastify/under-pressure": "^8.1.0",
     "@fastify/websocket": "^7.1.1",
@@ -26,7 +27,8 @@
     "dotenv": "^16.0.3",
     "fastify": "^4.10.2",
     "form-data": "^4.0.0",
-    "sanitize-filename": "^1.6.3"
+    "sanitize-filename": "^1.6.3",
+    "swagger-ui-dist": "^4.15.5"
   },
   "overrides": {
     "@polkadot/apps-config": {
