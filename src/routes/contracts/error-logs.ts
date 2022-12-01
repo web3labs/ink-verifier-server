@@ -31,7 +31,6 @@ export default function registerErrorLogs (fastify: FastifyInstance) {
     const {
       errorDir
     } = new VerifierLocations(req.params)
-
     const logFile = path.resolve(errorDir, 'out.log')
 
     if (fs.existsSync(logFile)) {
