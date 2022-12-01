@@ -9,7 +9,8 @@ async function main () {
     services: {
       underPressure: true,
       rateLimit: true,
-      cors: true
+      cors: true,
+      swaggerUI: true
     }
   })
 
