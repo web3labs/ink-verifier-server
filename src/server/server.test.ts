@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify'
 import fs, { Stats } from 'node:fs'
 
-import Server from './server'
+import Server, { TestServicesConfig } from './server'
 
 jest.mock('node:fs', () => (
   {
@@ -16,11 +16,7 @@ describe('server', () => {
   beforeAll(async () => {
     // run the server instance we are testing against
     server = await Server({
-      services: {
-        underPressure: false,
-        rateLimit: false,
-        cors: false
-      }
+      services: TestServicesConfig
     })
     await server.listen({ port: 0 })
   })

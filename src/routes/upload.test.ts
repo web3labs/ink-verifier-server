@@ -5,7 +5,7 @@ import path from 'path'
 import FormData from 'form-data'
 import Multipart from '@fastify/multipart'
 
-import Server from '../server/server'
+import Server, { TestServicesConfig } from '../server/server'
 import WorkMan from '../verification/worker'
 import { Upload } from '../routes'
 
@@ -30,11 +30,7 @@ describe('upload endpoints', () => {
   beforeAll(async () => {
     // run the server instance we are testing against
     server = await Server({
-      services: {
-        underPressure: false,
-        rateLimit: false,
-        cors: false
-      }
+      services: TestServicesConfig
     })
     await server.listen({ port: 0 })
   })

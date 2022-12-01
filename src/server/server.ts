@@ -5,15 +5,25 @@ import WebSocket from '@fastify/websocket'
 import CORS from '@fastify/cors'
 import RateLimit from '@fastify/rate-limit'
 
-import { Upload, Info, Tail, Contracts } from '../routes'
+import { ApiDocs, Upload, Info, Tail, Contracts } from '../routes'
 import registerOpenApi from './open-api'
 
-async function Server (config: FastifyServerOptions & {
-  services: {
+interface ServicesConfig {
     underPressure: boolean,
     rateLimit: boolean,
-    cors: boolean
-  }
+    cors: boolean,
+    swaggerUI: boolean
+}
+
+export const TestServicesConfig : ServicesConfig = {
+  underPressure: false,
+  rateLimit: false,
+  cors: false,
+  swaggerUI: false
+}
+
+async function Server (config: FastifyServerOptions & {
+  services: ServicesConfig
 }) {
   const server = await Fastify(config)
 
@@ -55,6 +65,10 @@ async function Server (config: FastifyServerOptions & {
     }
   })
 
+  /* istanbul ignore next */
+  if (config.services.swaggerUI) {
+    await server.register(ApiDocs)
+  }
   await registerOpenApi(server)
 
   await server.register(Contracts)
