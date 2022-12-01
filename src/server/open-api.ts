@@ -49,7 +49,8 @@ export function transformSchema ({
         },
         signature: {
           type: 'string',
-          description: 'The xxx signature, see tutto...'
+          description: `The code hash owner signature,
+          see [owner-signed metadata](https://github.com/web3labs/ink-verifier-server#unverified-metadata-upload)`
         }
       },
       required: ['metadata', 'signature']
