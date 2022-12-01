@@ -5,6 +5,8 @@ import fs from 'node:fs'
 import crypto from 'node:crypto'
 
 import { signatureVerify } from '@polkadot/util-crypto'
+import type { HexString } from '@polkadot/util/types'
+
 import { MultipartFile } from '@fastify/multipart'
 
 import { VerifierLocations } from './locations'
@@ -34,7 +36,7 @@ export async function verifyMetadata ({
   locs
 }: {
     data: MultipartFile,
-    signature: string,
+    signature: HexString | Uint8Array | string,
     locs: VerifierLocations
 }) {
   let tmpDir = path.join(TMP_DIR, `meta-${locs.network}-${locs.codeHash}`)
@@ -73,7 +75,7 @@ export async function verifyMetadata ({
             codeHash: locs.codeHash
           })
 
-          log.info(`Verifying [codeHash=${locs.codeHash}, sig=${signature}, owner=${owner}]`)
+          log.info(`Verifying [codeHash=${locs.codeHash}, sig=${signature}, owner=${owner}, message=${message}]`)
           const sv = signatureVerify(message, signature, owner)
 
           if (sv.isValid) {
