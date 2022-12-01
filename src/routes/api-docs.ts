@@ -14,7 +14,7 @@ const ApiDocs : FastifyPluginCallback = async (fastify, opts, done) => {
   })
 
   fastify.get('/api-docs', async (_, reply) => {
-    return reply.redirect('/api-docs/')
+    return reply.redirect(`${OAS_URL}/api-docs/`)
   })
 
   fastify.get('/api-docs/', async (_, reply) => {
