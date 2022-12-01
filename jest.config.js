@@ -11,8 +11,6 @@ module.exports = {
     '<rootDir>/src/config/swagger-ui.ts'
   ],
   modulePathIgnorePatterns: [
-    '<rootDir>/\\.tmp/.*',
-    '<rootDir>/src/config/swagger-ui.ts',
-    '<rootDir>/src/routes/api-docs.ts'
+    '<rootDir>/\\.tmp/.*'
   ]
 }
