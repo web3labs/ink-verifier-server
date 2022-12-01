@@ -5,6 +5,7 @@ module.exports = {
     env_production: {
       NODE_ENV: 'production',
       SERVER_HOST: '0.0.0.0',
+      OAS_URL: 'https://ink-verifier.sirato.xyz/api',
       TMP_DIR: '/opt/verifier/tmp',
       BASE_DIR: '/opt/verifier/data',
       CACHES_DIR: '/opt/verifier/.caches',
