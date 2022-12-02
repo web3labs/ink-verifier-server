@@ -1,6 +1,6 @@
 # Source Code Verification Tutorial
 
-> If you would like to understand how the system components relate to each other, please check out the [Ink! Verifier Explainer](./INK_VERIFIER_EXPLAINER.md).
+> If you would like to understand how the system components relate to each other, please check out the [ink! Verifier Explainer](./INK_VERIFIER_EXPLAINER.md).
 
 **Table of Contents**
 
@@ -62,7 +62,7 @@ Alternatively, you can run all the above commands at once executing the `./run-a
 
 #### **Local Verifier Server Setup**
 
-Clone the [Ink! Verifier Server](https://github.com/web3labs/ink-verifier-server) repository
+Clone the [ink! Verifier Server](https://github.com/web3labs/ink-verifier-server) repository
 
 ```bash
 git clone git@github.com:web3labs/ink-verifier-server.git
@@ -117,8 +117,8 @@ Arguments:
   <SOURCE>  Source directory, can be relative; e.g. '.'
 
 Options:
-  -i, --image <IMAGE>        Ink! verifier image name [default: ink-verifier]
-  -t, --tag <TAG>            Ink! verifier image tag [default: latest]
+  -i, --image <IMAGE>        ink! verifier image name [default: ink-verifier]
+  -t, --tag <TAG>            ink! verifier image tag [default: latest]
       --engine <ENGINE>      Container engine [default: docker]
       --env-file <ENV_FILE>  Environment file
   -h, --help                 Print help information
