@@ -1,6 +1,6 @@
-# 🦑 Verifier Server for Ink!
+# 🦑 Verifier Server for ink!
 
-Server for Ink! source code verification.
+Server for ink! source code verification.
 
 Features:
 
@@ -11,9 +11,9 @@ Features:
 - Signed upload of contract metadata
 - Access to the verified artifacts
 
-For a high-level explanation of the Ink! Verifier Server and how it integrates with the [Explorer UI](https://github.com/web3labs/epirus-substrate/tree/main/explorer-ui) and [Ink! Verifier Image](https://github.com/web3labs/ink-verifier-image), please check ou.t the [Ink! Verifier Explainer](./docs/INK_VERIFIER_EXPLAINER.md)
+For a high-level explanation of the ink! Verifier Server and how it integrates with the [Explorer UI](https://github.com/web3labs/epirus-substrate/tree/main/explorer-ui) and [ink! Verifier Image](https://github.com/web3labs/ink-verifier-image), please check out the [ink! Verifier Explainer](./docs/INK_VERIFIER_EXPLAINER.md)
 
-For instructions on how to generate a verifiable source code package, please check out the [Ink! Verifier Image documentation](https://github.com/web3labs/ink-verifier-image/blob/main/README.md#package-generation).
+For instructions on how to generate a verifiable source code package, please check out the ink! Verifier Image [documentation](https://github.com/web3labs/ink-verifier-image/blob/main/README.md#package-generation).
 
 For instructions on how to carry out a full end-to-end test, please check out our [tutorial](./docs/TUTORIAL.md).
 
@@ -91,7 +91,7 @@ npm run lint
 
 ## Running in Production
 
-The Ink Verification Server is meant to be run as a standalone OS process since it spawn container processes for
+The ink! Verification Server is meant to be run as a standalone OS process since it spawn container processes for
 the reproducible builds and we want to avoid the nuances of Docker in Docker or similar solutions.
 
 We recommend the usage of [PM2](https://pm2.keymetrics.io/) process manager, an `ecosystem.config.js` is provided for this purpose.
@@ -167,7 +167,7 @@ We are using [@polkadot/apps-config](https://github.com/polkadot-js/apps/tree/ma
 
 ## Additional Developer Tools
 
-To make the verification process easier for ink! smart contract developers, we provide a command line tool to help with building smart contracts with Ink! Verifier Image so that the contract can later be verified. At the same time, the tool does the packaging and compression of the source code and resulting `.contract` file in the directory structure that Ink! Verifier Image expects during verification.
+To make the verification process easier for ink! smart contract developers, we provide a command line tool to help with building smart contracts with ink! Verifier Image so that the contract can later be verified. At the same time, the tool does the packaging and compression of the source code and resulting `.contract` file in the directory structure that ink! Verifier Image expects during verification.
 
 The tool can be installed from the github repository
 
