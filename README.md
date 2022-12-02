@@ -1,20 +1,5 @@
 # 🦑 Verifier Server for Ink!
 
-- [Configuration](#configuration)
-- [Running Locally](#running-locally)
-- [Testing](#testing)
-- [Linting](#linting)
-- [Running in Production](#running-in-production)
-- [Reproducible Builds Verification](#reproducible-builds-verification)
-  - [Actors](#actors)
-  - [Directories](#directories)
-  - [Process Overview](#process-overview)
-- [Unverified Metadata Upload](#unverified-metadata-upload)
-- [Technical Notes](#technical-notes)
-  - [Publish Directory](#publish-directory)
-  - [Network Names](#network-names)
-- [Additional Developer Tools](#additional-developer-tools)
-
 Server for Ink! source code verification.
 
 Features:
@@ -31,6 +16,23 @@ For a high-level explanation of the Ink! Verifier Server and how it integrates w
 For instructions on how to generate a verifiable source code package, please check out the [Ink! Verifier Image documentation](https://github.com/web3labs/ink-verifier-image/blob/main/README.md#package-generation).
 
 For instructions on how to carry out a full end-to-end test, please check out our [tutorial](./docs/TUTORIAL.md).
+
+**Table of Contents**
+
+- [Configuration](#configuration)
+- [Running Locally](#running-locally)
+- [Testing](#testing)
+- [Linting](#linting)
+- [Running in Production](#running-in-production)
+- [Reproducible Builds Verification](#reproducible-builds-verification)
+  - [Actors](#actors)
+  - [Directories](#directories)
+  - [Process Overview](#process-overview)
+- [Unverified Metadata Upload](#unverified-metadata-upload)
+- [Technical Notes](#technical-notes)
+  - [Publish Directory](#publish-directory)
+  - [Network Names](#network-names)
+- [Additional Developer Tools](#additional-developer-tools)
 
 ## Configuration
 

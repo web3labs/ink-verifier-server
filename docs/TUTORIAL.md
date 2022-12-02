@@ -2,6 +2,8 @@
 
 > If you would like to understand how the system components relate to each other, please check out the [Ink! Verifier Explainer](./INK_VERIFIER_EXPLAINER.md).
 
+**Table of Contents**
+
 - [**Testing on Local Network**](#testing-on-local-network)
   - [**Prerequisites**](#prerequisites)
     - [**Local Testnet and Explorer Setup**](#local-testnet-and-explorer-setup)
@@ -243,7 +245,7 @@ You will now see your contract metadata in the source code tab.
 
 We run a public instance of the Explorer UI that indexes Rococo Contracts and is integrated with our verifier server. You can access the public explorer at https://substrate.sirato.xyz/
 
-If you wish to verify contracts or upload metadata in Rococo Contracts, simply follow the same steps as in [S1 - Verifiable Packages](#s1---verifiable-packages) and [S2 - Owner-signed Metadata](#s2---owner-signed-metadata) using the public Explorer instance.
+If you wish to verify contracts or upload metadata in Rococo Contracts, simply follow the same steps as in [S1 - Verifiable Packages](#s1---verifiable-packages) and [S2 - Owner-signed Metadata](#s2---owner-signed-metadata) using the public Explorer instance. For source code verification, you will need to use the [example contracts](https://github.com/web3labs/dev-contracts-substrate/tree/main/verifiable-packages/ink4.0.0-beta) built with cargo-contract v2.0.0-beta. If you want to build your own contracts, follow [these instructions](https://github.com/web3labs/ink-verifier-image/blob/main/README.md#building-with-container-image-directly) on how to run the verifier image with a different cargo-contract version. The reason for the need to toggle versions is explained [here](https://github.com/web3labs/ink-verifier-image/blob/main/README.md#caveats).
 
 If you need some ROC to upload contracts, head to the Rococo Faucet Matrix chatroom #rococo-faucet:matrix.org and post
 ```
