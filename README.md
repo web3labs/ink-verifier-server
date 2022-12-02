@@ -29,7 +29,9 @@ For instructions on how to carry out a full end-to-end test, please check out ou
   - [Directories](#directories)
   - [Process Overview](#process-overview)
 - [Unverified Metadata Upload](#unverified-metadata-upload)
-- [Web API Documentation](#web-api-documentation)
+- [Web API](#web-api)
+  - [OpenAPI Documentation](#openapi-documentation)
+  - [Postman Collection](#postman-collection)
 - [Technical Notes](#technical-notes)
   - [Publish Directory](#publish-directory)
   - [Network Names](#network-names)
@@ -42,11 +44,11 @@ The configuration uses the environment variables described in the table below.
 |Name|Description|Defaults|
 |----|-----------|--------|
 |SERVER_HOST|The server host address. e.g. 0.0.0.0|`127.0.0.1`|
-|SERVER_PORT|The server port to listen to|`3000`|
+|SERVER_PORT|The server port to listen to|`3001`|
 |OAS_URL|The external URL of the server for the Opean Api docs|`http://${SERVER_HOST}:${SERVER_PORT}`|
-|BASE_DIR|Base directory for verification pipeline stages|`:project_root_dir/tmp`|
-|CACHES_DIR|The base directory for caches|`:project_root_dir/tmp/caches`|
-|PUBLISH_DIR|Base directory for long-term access to successfully verified artefacts|`:project_root_dir/publish`|
+|BASE_DIR|Base directory for verification pipeline stages|`:project_root_dir/.tmp`|
+|CACHES_DIR|The base directory for caches|`:project_root_dir/.tmp/caches`|
+|PUBLISH_DIR|Base directory for long-term access to successfully verified artefacts|`:project_root_dir/.tmp/publish`|
 |MAX_CONTAINERS|Maximum number of running containers|`5`|
 |VERIFIER_IMAGE|The ink-verifier container image to be used for verification|`ink-verifier:develop`|
 |CONTAINER_ENGINE|The container engine executable|`docker`|
@@ -92,7 +94,7 @@ npm run lint
 
 ## Running in Production
 
-The ink! Verification Server is meant to be run as a standalone OS process since it spawn container processes for
+The ink! Verification Server is meant to be run as a standalone OS process since it spawns container processes for
 the reproducible builds and we want to avoid the nuances of Docker in Docker or similar solutions.
 
 We recommend the usage of [PM2](https://pm2.keymetrics.io/) process manager, an `ecosystem.config.js` is provided for this purpose.
@@ -155,13 +157,19 @@ Although it is a far from ideal way to bind the metadata to a given code hash it
 - Verifying that the signature is from the owner account of the code hash.
 - Verifying that the signed message matches the sha256 of the uploaded `metadata.json` + the `code hash` of the uploaded contract bytecode.
 
-## Web API Documentation
+## Web API
 
-OpenAPI schemas are automatically generated from the server route schemas. If you are running the server locally, you can find the schema at http://0.0.0.0:3001/oas.json.
+### OpenAPI Documentation
+
+OpenAPI schemas are automatically generated from the server route schemas. If you are running the server locally, you can find the schema at http://127.0.0.1:3001/oas.json.
 
 For the public instance that we are running, the OpenAPI schema can be found at https://ink-verifier.sirato.xyz/api/oas.json.
 
 We also serve a Swagger interface at https://ink-verifier.sirato.xyz/api/api-docs/
+
+### Postman Collection
+
+You can import the API collection and environments found [here](./it/postman/) into Postman for easy testing of the API. 
 
 ## Technical Notes
 
