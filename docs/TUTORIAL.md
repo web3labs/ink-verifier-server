@@ -247,6 +247,8 @@ We run a public instance of the Explorer UI that indexes Rococo Contracts and is
 
 If you wish to verify contracts or upload metadata in Rococo Contracts, simply follow the same steps as in [S1 - Verifiable Packages](#s1---verifiable-packages) and [S2 - Owner-signed Metadata](#s2---owner-signed-metadata) using the public Explorer instance. For source code verification, you will need to use the [example contracts](https://github.com/web3labs/dev-contracts-substrate/tree/main/verifiable-packages/ink4.0.0-beta) built with cargo-contract v2.0.0-beta. If you want to build your own contracts, follow [these instructions](https://github.com/web3labs/ink-verifier-image/blob/main/README.md#building-with-container-image-directly) on how to run the verifier image with a different cargo-contract version. The reason for the need to toggle versions is explained [here](https://github.com/web3labs/ink-verifier-image/blob/main/README.md#caveats).
 
+> At the time of writing, polkadot.js UI still does not support Weights V2 (see [this issue](https://github.com/paritytech/ink-waterfall/issues/41)). We suggest using either [Contracts UI](https://contracts-ui.substrate.io) or [cargo-contract](https://github.com/paritytech/cargo-contract#usage) for interacting with contracts in Rococo Contracts.
+
 If you need some ROC to upload contracts, head to the Rococo Faucet Matrix chatroom #rococo-faucet:matrix.org and post
 ```
 !drip YOUR_SS_58_ADDRESS:1002
