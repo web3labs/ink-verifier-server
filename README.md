@@ -29,6 +29,7 @@ For instructions on how to carry out a full end-to-end test, please check out ou
   - [Directories](#directories)
   - [Process Overview](#process-overview)
 - [Unverified Metadata Upload](#unverified-metadata-upload)
+- [Web API Documentation](#web-api-documentation)
 - [Technical Notes](#technical-notes)
   - [Publish Directory](#publish-directory)
   - [Network Names](#network-names)
@@ -153,6 +154,14 @@ This feature responds to (1) the support for `build_info` data is only available
 Although it is a far from ideal way to bind the metadata to a given code hash it prevents trivial exploitation by:
 - Verifying that the signature is from the owner account of the code hash.
 - Verifying that the signed message matches the sha256 of the uploaded `metadata.json` + the `code hash` of the uploaded contract bytecode.
+
+## Web API Documentation
+
+OpenAPI schemas are automatically generated from the server route schemas. If you are running the server locally, you can find the schema at http://0.0.0.0:3001/oas.json.
+
+For the public instance that we are running, the OpenAPI schema can be found at https://ink-verifier.sirato.xyz/api/oas.json.
+
+We also serve a Swagger interface at https://ink-verifier.sirato.xyz/api/api-docs/
 
 ## Technical Notes
 
