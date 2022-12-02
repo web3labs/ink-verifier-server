@@ -1,5 +1,20 @@
 # 🦑 Verifier Server for Ink!
 
+- [Configuration](#configuration)
+- [Running Locally](#running-locally)
+- [Testing](#testing)
+- [Linting](#linting)
+- [Running in Production](#running-in-production)
+- [Reproducible Builds Verification](#reproducible-builds-verification)
+  - [Actors](#actors)
+  - [Directories](#directories)
+  - [Process Overview](#process-overview)
+- [Unverified Metadata Upload](#unverified-metadata-upload)
+- [Technical Notes](#technical-notes)
+  - [Publish Directory](#publish-directory)
+  - [Network Names](#network-names)
+- [Additional Developer Tools](#additional-developer-tools)
+
 Server for Ink! source code verification.
 
 Features:
@@ -11,9 +26,11 @@ Features:
 - Signed upload of contract metadata
 - Access to the verified artifacts
 
-For a high-level explanation of the Ink! Verifier Server and how it integrates with the [Explorer UI](https://github.com/web3labs/epirus-substrate/tree/main/explorer-ui) and [Ink! Verifier Image](https://github.com/web3labs/ink-verifier-image), please check out the [Ink! Verifier Explainer](./docs/INK_VERIFIER_EXPLAINER.md)
+For a high-level explanation of the Ink! Verifier Server and how it integrates with the [Explorer UI](https://github.com/web3labs/epirus-substrate/tree/main/explorer-ui) and [Ink! Verifier Image](https://github.com/web3labs/ink-verifier-image), please check ou.t the [Ink! Verifier Explainer](./docs/INK_VERIFIER_EXPLAINER.md)
 
-For instructions on how to generate a verifiable source code package, please check out the [Ink! Verifier Image documentation](https://github.com/web3labs/ink-verifier-image/blob/main/README.md#package-generation)
+For instructions on how to generate a verifiable source code package, please check out the [Ink! Verifier Image documentation](https://github.com/web3labs/ink-verifier-image/blob/main/README.md#package-generation).
+
+For instructions on how to carry out a full end-to-end test, please check out our [tutorial](./docs/TUTORIAL.md).
 
 ## Configuration
 
@@ -146,3 +163,29 @@ For source code verification the network name is required to download the upload
 
 We are using [@polkadot/apps-config](https://github.com/polkadot-js/apps/tree/master/packages/apps-config) to resolve the network endpoints by name. You can find the available endpoints in the [endpoints directory](https://github.com/polkadot-js/apps/tree/master/packages/apps-config/src/endpoints).
 
+## Additional Developer Tools
+
+To make the verification process easier for ink! smart contract developers, we provide a command line tool to help with building smart contracts with Ink! Verifier Image so that the contract can later be verified. At the same time, the tool does the packaging and compression of the source code and resulting `.contract` file in the directory structure that Ink! Verifier Image expects during verification.
+
+The tool can be installed from the github repository
+
+```
+❯ cargo install --git https://github.com/web3labs/ink-verifier-image.git
+```
+
+or built from source
+
+```
+❯ git clone git@github.com:web3labs/ink-verifier-image.git
+❯ cd cli/
+❯ cargo install --path .
+```
+
+The CLI can then be used as follows
+
+```
+❯ cd </path/to/contract>
+❯ build-verifiable-ink -t develop .
+```
+
+The source code for the  tool can be found at https://github.com/web3labs/ink-verifier-image/tree/main/cli

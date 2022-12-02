@@ -1,26 +1,28 @@
-> Please see [Ink! Verifier Explainer](https://github.com/web3labs/ink-verifier-server/blob/main/docs/INK_VERIFIER_EXPLAINER.md) for an overall explanation of how the system components relate to each other.
+# Source Code Verification Tutorial
 
-- [Testing on Local Network](#testing-on-local-network)
-  - [Prerequisites](#prerequisites)
-    - [Local Testnet and Explorer Setup](#local-testnet-and-explorer-setup)
-    - [Local Verifier Server Setup](#local-verifier-server-setup)
-  - [S1 - Verifiable Packages](#s1---verifiable-packages)
-    - [Generating the Verifiable Package](#generating-the-verifiable-package)
-    - [Uploading to the Network](#uploading-to-the-network)
-    - [Verifying Your Contract](#verifying-your-contract)
-  - [S2 - Owner-signed Metadata](#s2---owner-signed-metadata)
-- [Testing on Rococo Contracts](#testing-on-rococo-contracts)
+> If you would like to understand how the system components relate to each other, please check out the [Ink! Verifier Explainer](./INK_VERIFIER_EXPLAINER.md).
 
-# Testing on Local Network
+- [**Testing on Local Network**](#testing-on-local-network)
+  - [**Prerequisites**](#prerequisites)
+    - [**Local Testnet and Explorer Setup**](#local-testnet-and-explorer-setup)
+    - [**Local Verifier Server Setup**](#local-verifier-server-setup)
+  - [**S1 - Verifiable Packages**](#s1---verifiable-packages)
+    - [**Generating the Verifiable Package**](#generating-the-verifiable-package)
+    - [**Uploading to the Network**](#uploading-to-the-network)
+    - [**Verifying Your Contract**](#verifying-your-contract)
+  - [**S2 - Owner-signed Metadata**](#s2---owner-signed-metadata)
+- [**Testing on Rococo Contracts**](#testing-on-rococo-contracts)
 
-## Prerequisites
+## **Testing on Local Network**
+
+### **Prerequisites**
 
 You will need the following software installed in your machine:
 - Docker >= 20.10.21
 - Docker Compose >= 1.29.2
 - Node.js >= 16.5.1
 
-### Local Testnet and Explorer Setup
+#### **Local Testnet and Explorer Setup**
 
 Clone the [epirus-substrate](https://github.com/web3labs/epirus-substrate) repository
 
@@ -56,7 +58,7 @@ docker-compose -f docker-compose.explorer-ui.yml up -d
 
 Alternatively, you can run all the above commands at once executing the `./run-all.sh` script.
 
-### Local Verifier Server Setup
+#### **Local Verifier Server Setup**
 
 Clone the [Ink! Verifier Server](https://github.com/web3labs/ink-verifier-server) repository
 
@@ -69,11 +71,11 @@ Enter the project directory and start the server. You can also run `npm run star
 cd ink-verifier-server && npm start
 ```
 
-## S1 - Verifiable Packages
+### **S1 - Verifiable Packages**
 
 In this scenario we will generate a verifiable package, upload the contract to local chain and verify it using the explorer UI.
 
-### Generating the Verifiable Package
+#### **Generating the Verifiable Package**
 > You can skip directly to the next section [Uploading to the Network](#uploading-to-the-network) if you use verifiable packages already generated in [this repo directory](https://github.com/web3labs/dev-contracts-substrate/tree/main/verifiable-packages/ink4.0.0-alpha.3). Note that in this case you will need to use Polkadot.js UI or Contracts UI for uploading.
 
 Clone the  [ink-verifier-image](https://github.com/web3labs/ink-verifier-image) repository
@@ -166,7 +168,7 @@ Archive:  /build/target/ink/package.zip
     23904                     5 files
 ```
 
-### Uploading to the Network
+#### **Uploading to the Network**
 
 Extract the `<name>.contract` file frome the package.zip if you plan to use [Polkadot.js UI](https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A9944#/contracts) or [Contracts UI](https://weightv1--contracts-ui.netlify.app/?rpc=ws://127.0.0.1:9944) to upload your contract. If you want to use cargo-contract tool, you will need to extract the `metadata.json` and `flipper.wasm` files.
 ```bash
@@ -179,7 +181,7 @@ If you're using cargo-contract
 cargo contract upload -s '//Bob'
 ```
 
-### Verifying Your Contract
+#### **Verifying Your Contract**
 
 Now you can use the explorer ui to find your contract code hash and verify the source code package.
 
@@ -207,7 +209,7 @@ Click on Browse Verified Files to see your verified source code.
  
 ![verified source code](https://drive.google.com/uc?id=1xRBp2wQ_aUox3Ca50Hu6Y95R4wKhfC-3)
 
-## S2 - Owner-signed Metadata
+### **S2 - Owner-signed Metadata**
 
 > To understand more about this feature and why we are supporting it, check out the [veriifier server documentation](../README.md#unverified-metadata-upload)
  
@@ -219,7 +221,7 @@ Since this feature does not carry out verification, you can use any ink! contrac
 
 **Note:**
 
-If you have already verified the source code following the steps in [S1 - Verifiable Packages](#s1---verifiable-packages), you won't have the option to test out the metadata upload using the same contract. If you want to avoid compiling and uploading another contract, you can remove the verified source code in `<root-path>/ink-verifier-server/.tmp/publish/<codehash>/`
+If you have already verified the source code following the steps in [S1 - Verifiable Packages](#s1---verifiable-packages), you won't have the option to test out the metadata upload using the same contract. If you want to avoid compiling and uploading another contract, you can remove the directory storing the verified source code in `<root-path>/ink-verifier-server/.tmp/publish/<codehash>/`
 
 ---
 
@@ -237,8 +239,13 @@ You will now see your contract metadata in the source code tab.
 
 ![signed metadata upload](https://drive.google.com/uc?id=137VFlVosRVZFcsZpZSWY82qIEFX3gIJz)
 
-# Testing on Rococo Contracts
+## **Testing on Rococo Contracts**
 
 We run a public instance of the Explorer UI that indexes Rococo Contracts and is integrated with our verifier server. You can access the public explorer at https://substrate.sirato.xyz/
 
 If you wish to verify contracts or upload metadata in Rococo Contracts, simply follow the same steps as in [S1 - Verifiable Packages](#s1---verifiable-packages) and [S2 - Owner-signed Metadata](#s2---owner-signed-metadata) using the public Explorer instance.
+
+If you need some ROC to upload contracts, head to the Rococo Faucet Matrix chatroom #rococo-faucet:matrix.org and post
+```
+!drip YOUR_SS_58_ADDRESS:1002
+```
