@@ -38,6 +38,8 @@ Change directory to `local-testnet`
 cd epirus-substrate/local-testnet
 ```
 
+> ℹ️ You can run all the following processes at once by executing the `./run-all.sh` script.
+
 Run your substrate test network
 ```bash
 docker-compose -f docker-compose.testnet.yml up -d
@@ -57,8 +59,6 @@ Run the explorer user interface
 ```bash
 docker-compose -f docker-compose.explorer-ui.yml up -d
 ```
-
-Alternatively, you can run all the above commands at once executing the `./run-all.sh` script.
 
 #### **Local Verifier Server Setup**
 
@@ -223,7 +223,7 @@ Since this feature does not carry out verification, you can use any ink! contrac
 
 **Note:**
 
-If you have already verified the source code following the steps in [S1 - Verifiable Packages](#s1---verifiable-packages), you won't have the option to test out the metadata upload using the same contract. If you want to avoid compiling and uploading another contract, you can remove the directory storing the verified source code in `<root-path>/ink-verifier-server/.tmp/publish/<codehash>/`
+If you have already verified the source code following the steps in [S1 - Verifiable Packages](#s1---verifiable-packages), you won't have the option to test out the metadata upload using the same contract. If you want to avoid compiling and uploading another contract, you can remove the published source code in the ink! Verifier Server publish directory: `<root-path>/ink-verifier-server/.tmp/publish/<codehash>/`
 
 ---
 
