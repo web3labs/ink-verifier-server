@@ -180,14 +180,17 @@ Extract the `<name>.contract` file frome the package.zip if you plan to use [Pol
 ```
 If you're using cargo-contract
 ```
-cargo contract upload -s '//Bob'
+cargo contract instantiate \
+--constructor new \
+--args false \
+--suri //Alice
 ```
 
 #### **Verifying Your Contract**
 
-Now you can use the explorer ui to find your contract code hash and verify the source code package.
+Now you can use the explorer UI to find your contract code hash and verify the source code package.
 
-Go to the explorer-ui. It should be running on http://127.0.0.1:3000/ and you should see the homepage.
+Go to the explorer UI. It should be running on http://127.0.0.1:3000/ and you should see the homepage.
 
 ![homepage](https://drive.google.com/uc?id=1yG6bLlOQiywm9svg9-dtB8gY_PdLmExT)
 
