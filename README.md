@@ -157,6 +157,8 @@ Although it is a far from ideal way to bind the metadata to a given code hash it
 - Verifying that the signature is from the owner account of the code hash.
 - Verifying that the signed message matches the sha256 of the uploaded `metadata.json` + the `code hash` of the uploaded contract bytecode.
 
+For instructions on how to upload and sign metadata from the Explorer UI, please check out our [tutorial](./docs/TUTORIAL.md#s2---owner-signed-metadata)
+
 ## Web API
 
 ### OpenAPI Documentation
