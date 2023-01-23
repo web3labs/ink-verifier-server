@@ -70,7 +70,7 @@ git clone git@github.com:web3labs/ink-verifier-server.git
 
 Enter the project directory and start the server. You can also run `npm run start:dev` to see prettified logs.
 ```bash
-cd ink-verifier-server && npm start
+cd ink-verifier-server && npm install && npm start
 ```
 
 ### **S1 - Verifiable Packages**
