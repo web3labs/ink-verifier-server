@@ -27,7 +27,10 @@ You will need the following software installed in your machine:
 
 ### **Docker User Namespace Remapping**
 
-In order to run the source code verification workloads you will need to set up a [user namespace remapping](https://docs.docker.com/engine/security/userns-remap/) configuration for your docker daemon.
+> The user namespace remapping is only required in non-rootless Linux hosts.
+> If you are running docker in rootless mode or using macOS it does not apply.
+
+In order to run the source code verification workloads you will need to set up a [user namespace remapping](https://docs.docker.com/engine/security/userns-remap/) configuration for your docker daemon to match the host user that runs the ink verifier server.
 
 Get the uid of the user that will run the ink verifier server process, example for the current user:
 ```
