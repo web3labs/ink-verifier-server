@@ -6,6 +6,7 @@
 
 - [**Testing on Local Network**](#testing-on-local-network)
   - [**Prerequisites**](#prerequisites)
+    - [**Docker User Namespace Remapping**](#docker-user-namespace-remapping)
     - [**Local Testnet and Explorer Setup**](#local-testnet-and-explorer-setup)
     - [**Local Verifier Server Setup**](#local-verifier-server-setup)
   - [**S1 - Verifiable Packages**](#s1---verifiable-packages)
@@ -23,6 +24,53 @@ You will need the following software installed in your machine:
 - Docker >= 20.10.21
 - Docker Compose >= 1.29.2
 - Node.js >= 16.5.1
+
+### **Docker User Namespace Remapping**
+
+In order to run the source code verification workloads you will need to set up a [user namespace remapping](https://docs.docker.com/engine/security/userns-remap/) configuration for your docker daemon.
+
+Get the uid of the user that will run the ink verifier server process, example for the current user:
+```
+❯ id -u
+1000
+```
+and the name:
+```
+❯ id -un
+marc
+```
+
+Edit `/etc/docker/daemon.json`, or create if it does not exist, to add the following content:
+```json
+{
+  "userns-remap": "<USER_NAME>"
+}
+```
+Example:
+```json
+{
+   "userns-remap": "marc"
+}
+```
+
+Now configure the remapping range in `/etc/subuid`, adding a line at the start of the file:
+```
+<USER_NAME>:<USER_ID>:1
+```
+Example:
+```
+marc:1000:1
+marc:100000:65536
+```
+
+> Restarting the docker daemon will kill your running containers.
+> If you have already built the ink-verifier-image:develop locally,
+> please rebuild it.
+
+Restart the docker daemon:
+```
+❯ sudo service docker restart
+```
 
 #### **Local Testnet and Explorer Setup**
 
@@ -54,6 +102,8 @@ Run a squid-ink processor
 ```bash
 docker-compose -f docker-compose.squid-ink.yml up -d
 ```
+> Squid-ink processor connects to http://host.docker.internal:3001/
+> where expects the local verifier server listening to retrieve metadata
 
 Run the explorer user interface
 ```bash
@@ -68,10 +118,16 @@ Clone the [ink! Verifier Server](https://github.com/web3labs/ink-verifier-server
 git clone git@github.com:web3labs/ink-verifier-server.git
 ```
 
-Enter the project directory and start the server. You can also run `npm run start:dev` to see prettified logs.
+Enter the project directory and install the server dependiencies.
 ```bash
-cd ink-verifier-server && npm install && npm start
+cd ink-verifier-server && npm install
 ```
+
+Run the server listening in all the network interfaces.
+```bash
+SERVER_HOST=0.0.0.0 npm start
+```
+> The server is accessed from a container using `host.docker.internal`.
 
 ### **S1 - Verifiable Packages**
 
