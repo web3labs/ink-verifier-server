@@ -114,9 +114,16 @@ class WorkMan {
 
     if (fs.existsSync(targetDir)) {
       // Move metadata.json to package/ for convenience
-      const metadataFile = path.resolve(targetDir, 'ink', 'metadata.json')
-      if (fs.existsSync(metadataFile)) {
-        fs.renameSync(metadataFile, path.resolve(packDir, 'metadata.json'))
+      const inkFiles = fs.readdirSync(path.resolve(targetDir, 'ink'))
+      for (let i = 0; i < inkFiles.length; i++) {
+        const fname = inkFiles[i]
+        // Assume, excluding .rustc_info.json, that a single
+        // <contract-name>.json file exists in the target/ink directory
+        if (fname.charAt(0) !== '.' && path.extname(fname) === '.json') {
+          const metadataFile = path.resolve(targetDir, 'ink', fname)
+          fs.renameSync(metadataFile, path.resolve(packDir, 'metadata.json'))
+          break
+        }
       }
       fs.rmSync(targetDir, { recursive: true, force: true })
     }
