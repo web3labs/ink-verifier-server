@@ -2,6 +2,7 @@ import EventEmitter from 'node:events'
 import fs from 'node:fs'
 import HttpError from '../errors'
 import { downloadByteCode } from './substrate'
+import { createWsEndpoints } from '@polkadot/apps-config/endpoints'
 
 class MockStream extends EventEmitter {
   write = jest.fn()
@@ -79,6 +80,22 @@ describe('substrate', () => {
         codeHash: '0xbadbadbad',
         dst: ''
       })).rejects.toThrow(HttpError)
+    })
+  })
+
+  describe('filter out aleph zero prod endpoint', () => {
+    it('should filter out aleph zero prod endpoint', async () => {
+      const endpoint = createWsEndpoints().filter(({
+        isDisabled, isUnreachable, value, info, text
+      }) =>
+        !isDisabled &&
+        !isUnreachable &&
+        value &&
+        !value.startsWith('light://') &&
+        value !== 'wss://ws.azero.dev' &&
+        info === 'aleph'
+      )[0]
+      expect(endpoint.value).toEqual('wss://ws.test.azero.dev')
     })
   })
 })
