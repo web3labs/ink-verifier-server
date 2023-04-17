@@ -66,9 +66,6 @@ function resolveEndpoint (network: string) : string {
     !isUnreachable &&
     value &&
     !value.startsWith('light://') &&
-    // TODO abhi: this is a tmp fix to filter out aleph zero mainnet endpoint.
-    // we should be impl a proper fix to select mainnet, testnet endpoints.
-    value !== 'wss://ws.azero.dev' &&
     info === network
   )
 
